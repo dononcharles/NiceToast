@@ -1,3 +1,26 @@
 <resources>
-    <string name="app_name">NiceToast</string>
+    <string name="app_name">Nice Toast</string>
+    <string name="custom_colors">Custom Colors</string>
+    <string name="full_background">Full Background</string>
+    <string name="dark_mode">Dark Mode</string>
+    <string name="success">Success</string>
+    <string name="error">Error</string>
+    <string name="warning">Warning</string>
+    <string name="info">Info</string>
+    <string name="delete">Delete</string>
+    <string name="no_internet">No Internet</string>
+    <string name="no_internet_connection">No Internet Connection</string>
+    <string name="please_check_your_internet_connection_and_try_again">Please check your internet connection and try again.</string>
+    <string name="delete_account">Delete Account</string>
+    <string name="your_account_has_been_deleted_successfully">Your account has been deleted successfully.</string>
+    <string name="new_update_available">New Update Available</string>
+    <string name="a_new_version_of_the_app_is_available_please_update_to_the_latest_version">A new version of the app is available. Please update to the latest version.</string>
+    <string name="low_battery">Low Battery</string>
+    <string name="your_battery_is_running_low_please_connect_to_a_charger">Your battery is running low. Please connect to a charger.</string>
+    <string name="there_was_an_error_uploading_your_file_please_try_again">There was an error uploading your file. Please try again.</string>
+    <string name="upload_failed">Upload Failed</string>
+    <string name="edit_profile">Edit Profile</string>
+    <string name="your_profile_was_updated_successfully">Your profile was updated successfully!</string>
+    <string name="buy_me_a_coffee">Buy me a coffee</string>
+    <string name="do_you_want_to_buy_me_a_coffee">Do you want to buy me a coffee?</string>
 </resources>
