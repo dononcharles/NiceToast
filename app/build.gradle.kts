@@ -25,7 +25,12 @@ android {
     buildTypes {
         release {
             isMinifyEnabled = false
+            buildConfigField("String", "DONATE_LINK", project.property("donateLink") as String)
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
+        }
+
+        debug {
+            buildConfigField("String", "DONATE_LINK", project.property("donateLink") as String)
         }
     }
     compileOptions {
@@ -39,6 +44,7 @@ android {
     }
     buildFeatures {
         compose = true
+        buildConfig = true
     }
 }
 
@@ -53,6 +59,8 @@ dependencies {
     implementation(libs.androidx.compose.ui)
     implementation(libs.androidx.compose.ui.graphics)
     implementation(libs.androidx.compose.ui.tooling.preview)
+    implementation(libs.androidx.compose.material.icons.core)
+    implementation(libs.androidx.compose.material.icons.extended)
     implementation(libs.androidx.compose.material3)
     implementation(project(":nicetoast"))
 
