@@ -27,21 +27,14 @@ jobs:
           distribution: 'temurin'
           cache: gradle
 
-      - name: Gradle Wrapper Validation (retry)
+      - name: Gradle Wrapper Validation
+        uses: gradle/wrapper-validation-action@v2
+        continue-on-error: true
+
+      - name: Fail if wrapper validation failed
+        if: failure() && steps.Gradle_Wrapper_Validation.outcome != 'success'
         run: |
-          for i in 1 2 3 4 5; do
-            echo "Attempt ${i}"
-            if gh api repos/gradle/wrapper-validation-action >/dev/null 2>&1; then
-              echo "Network ok"
-            fi
-            if npx --yes @gradle/wrapper-validation || npx --yes gradle-wrapper-validation; then
-              echo "Wrapper validation passed"
-              exit 0
-            fi
-            echo "Validation failed, retrying..."
-            sleep $((i*5))
-          done
-          echo "Wrapper validation failed after retries"
+          echo "Gradle wrapper validation failed after single attempt."
           exit 1
 
       - name: Setup Gradle and Caching
