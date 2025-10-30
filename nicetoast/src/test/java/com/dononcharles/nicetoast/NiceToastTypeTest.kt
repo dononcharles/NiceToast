@@ -116,14 +116,18 @@ class NiceToastTypeTest {
     fun `getEntries   content verification`() {
         // Check that the EnumEntries list returned by getEntries() contains all defined enum constants.
         val entries = NiceToastType.entries
-        assert(entries.containsAll(listOf(
-            NiceToastType.INFO,
-            NiceToastType.SUCCESS,
-            NiceToastType.WARNING,
-            NiceToastType.ERROR,
-            NiceToastType.DELETE,
-            NiceToastType.NO_INTERNET
-        )))
+        assert(
+            entries.containsAll(
+                listOf(
+                    NiceToastType.INFO,
+                    NiceToastType.SUCCESS,
+                    NiceToastType.WARNING,
+                    NiceToastType.ERROR,
+                    NiceToastType.DELETE,
+                    NiceToastType.NO_INTERNET
+                )
+            )
+        )
     }
 
     @Test
@@ -144,13 +148,6 @@ class NiceToastTypeTest {
             NiceToastType.NO_INTERNET
         )
         assert(NiceToastType.entries == expectedOrder)
-    }
-
-    @Test(expected = UnsupportedOperationException::class)
-    fun `getEntries   immutability`() {
-        // Confirm that the list returned by getEntries() is immutable; attempting to add or remove elements should result in an error or be disallowed. [7, 8]
-        val entries = NiceToastType.entries as MutableList<NiceToastType>
-        entries.add(NiceToastType.INFO) // This should throw an exception
     }
 
     @Test

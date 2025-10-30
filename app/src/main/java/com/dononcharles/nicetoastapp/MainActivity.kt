@@ -51,6 +51,7 @@ import androidx.core.net.toUri
 import com.dononcharles.nicetoast.LONG_DURATION
 import com.dononcharles.nicetoast.NiceToast
 import com.dononcharles.nicetoast.NiceToastType
+import com.dononcharles.nicetoast.SHORT_DURATION
 import com.dononcharles.nicetoast.TOAST_GRAVITY_BOTTOM
 
 class MainActivity : ComponentActivity() {
@@ -160,7 +161,7 @@ class MainActivity : ComponentActivity() {
                                 message = getString(R.string.there_was_an_error_uploading_your_file_please_try_again),
                                 toastType = NiceToastType.ERROR,
                                 position = TOAST_GRAVITY_BOTTOM,
-                                duration = LONG_DURATION,
+                                duration = SHORT_DURATION,
                                 font = ResourcesCompat.getFont(this, R.font.poppins_bold),
                                 isDarkMode = isDarkMode,
                                 isFullBackground = fullBackground
