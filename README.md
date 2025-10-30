@@ -28,7 +28,7 @@ Whether you need to show a success message, an error, a warning, or just some in
 
 ### GIF showcasing different toast types
 <div style="text-align: center;">
-  <img src="https://raw.githubusercontent.com/dononcharles/NiceToastAssets/main/assets/phone_preview.gif" width="300" alt="Nice Toast library for Android preview GIF"/>
+  <img src="https://raw.githubusercontent.com/dononcharles/NiceToastAssets/main/assets/blob/phone_preview.gif" width="300" alt="Nice Toast library for Android preview GIF"/>
 </div>
 
 ### Light Mode
