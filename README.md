@@ -26,7 +26,50 @@ Whether you need to show a success message, an error, a warning, or just some in
 
 ## ✨ Preview
 
-(Here you would insert screenshots or GIFs of your library in action. For example: a GIF showing the different toast types in both light and dark mode.)
+### GIF showcasing different toast types
+<div style="text-align: center;">
+  <img src="https://raw.githubusercontent.com/dononcharles/NiceToastAssets/main/assets/phone_preview.gif" width="300" alt="Nice Toast library for Android preview GIF"/>
+</div>
+
+### Light Mode
+<div style="text-align: center;">
+<table>
+  <tr>
+    <td><img src="https://raw.githubusercontent.com/dononcharles/NiceToastAssets/main/assets/img/shoot1.png" width="200" alt="Success Toast (Side-bar)"></td>
+    <td><img src="https://raw.githubusercontent.com/dononcharles/NiceToastAssets/main/assets/img/shoot2.png" width="200" alt="Success Toast (Solid)"></td>
+    <td><img src="https://raw.githubusercontent.com/dononcharles/NiceToastAssets/main/assets/img/shoot3.png" width="200" alt="Error Toast (Side-bar)"></td>
+    <td><img src="https://raw.githubusercontent.com/dononcharles/NiceToastAssets/main/assets/img/shoot4.png" width="200" alt="Error Toast (Solid)"></td>
+  </tr>
+  <tr>
+    <td><img src="https://raw.githubusercontent.com/dononcharles/NiceToastAssets/main/assets/img/shoot5.png" width="200" alt="Warning Toast (Side-bar)"></td>
+    <td><img src="https://raw.githubusercontent.com/dononcharles/NiceToastAssets/main/assets/img/shoot6.png" width="200" alt="Warning Toast (Solid)"></td>
+    <td><img src="https://raw.githubusercontent.com/dononcharles/NiceToastAssets/main/assets/img/shoot7.png" width="200" alt="Info Toast (Side-bar)"></td>
+    <td><img src="https://raw.githubusercontent.com/dononcharles/NiceToastAssets/main/assets/img/shoot8.png" width="200" alt="Info Toast (Solid)"></td>
+  </tr>
+    <tr>
+    <td><img src="https://raw.githubusercontent.com/dononcharles/NiceToastAssets/main/assets/img/shoot9.png" width="200" alt="Delete Toast (Side-bar)"></td>
+    <td><img src="https://raw.githubusercontent.com/dononcharles/NiceToastAssets/main/assets/img/shoot10.png" width="200" alt="No Internet Toast (Side-bar)"></td>
+  </tr>
+</table>
+</div>
+
+### Dark Mode
+<div style="text-align: center;">
+<table>
+  <tr>
+    <td><img src="https://raw.githubusercontent.com/dononcharles/NiceToastAssets/main/assets/img/shoot11.png" width="200" alt="Success Toast Dark (Side-bar)"></td>
+    <td><img src="https://raw.githubusercontent.com/dononcharles/NiceToastAssets/main/assets/img/shoot12.png" width="200" alt="Success Toast Dark (Solid)"></td>
+    <td><img src="https://raw.githubusercontent.com/dononcharles/NiceToastAssets/main/assets/img/shoot13.png" width="200" alt="Error Toast Dark (Side-bar)"></td>
+    <td><img src="https://raw.githubusercontent.com/dononcharles/NiceToastAssets/main/assets/img/shoot14.png" width="200" alt="Warning Toast Dark (Side-bar)"></td>
+  </tr>
+  <tr>
+    <td><img src="https://raw.githubusercontent.com/dononcharles/NiceToastAssets/main/assets/img/shoot15.png" width="200" alt="Info Toast Dark (Side-bar)"></td>
+    <td><img src="https://raw.githubusercontent.com/dononcharles/NiceToastAssets/main/assets/img/shoot16.png" width="200" alt="Delete Toast Dark (Side-bar)"></td>
+    <td><img src="https://raw.githubusercontent.com/dononcharles/NiceToastAssets/main/assets/img/shoot17.png" width="200" alt="No Internet Toast Dark (Side-bar)"></td>
+  </tr>
+</table>
+</div>
+
 
 ## 🚀 Installation
 
@@ -146,5 +189,8 @@ Your support helps cover the costs of development and allows me to invest more t
 *   Keeping the library up-to-date with the latest Android versions
 
 **Your contribution, no matter the size, makes a big difference.**
+<div style="text-align: center;">
 
 👉 [Donate via PayPal](https://www.paypal.com/paypalme/komidonon)
+
+</div>
