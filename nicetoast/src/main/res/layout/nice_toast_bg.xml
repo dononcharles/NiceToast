@@ -16,6 +16,7 @@
         android:contentDescription="@string/app_name"
         android:src="@drawable/outline_info_24"
         android:padding="@dimen/dimen_8dp"
+        android:background="@drawable/round_bg"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
