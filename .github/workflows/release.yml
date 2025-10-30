@@ -64,7 +64,7 @@ jobs:
           OSSRH_USERNAME: ${{ secrets.OSSRH_USERNAME }} #Your Sonatype OSSRH username
           OSSRH_TOKEN: ${{ secrets.OSSRH_TOKEN }} #Your Sonatype OSSRH password or token
           GPG_SECRET_KEY: ${{ secrets.GPG_SECRET_KEY }}
-          SIGNING_KEY_ID: ${{ secrets.GPG_SIGNING_KEY_ID }} #The last 8 characters of your GPG key ID
+          GPG_SIGNING_KEY_ID: ${{ secrets.GPG_SIGNING_KEY_ID }} #The last 8 characters of your GPG key ID
           SIGNING_PASSWORD: ${{ secrets.GPG_SECRET_KEY_PASSPHRASE }} #Your GPG key passphrase
 
       #If you keep useInMemoryPgpKeys in build.gradle.kts, you can omit the three -Psigning.* properties
