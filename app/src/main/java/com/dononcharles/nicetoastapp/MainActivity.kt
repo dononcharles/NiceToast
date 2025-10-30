@@ -53,7 +53,7 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     topBar = {
                         TopAppBar(
-                            title = { Text("NiceToast for Android") }
+                            title = { Text("Nice Toast") }
                         )
                     }
                 ) { innerPadding ->

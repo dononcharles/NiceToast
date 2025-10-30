@@ -4,6 +4,7 @@ plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.android)
     id("maven-publish")
+    id("signing")
 }
 
 android {
@@ -29,6 +30,13 @@ android {
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
     }
+    publishing {
+        singleVariant("release") {
+            withSourcesJar()
+            withJavadocJar()
+        }
+    }
+
     kotlin {
         compilerOptions {
             jvmTarget.set(JvmTarget.JVM_17)
@@ -56,16 +64,14 @@ afterEvaluate {
             create<MavenPublication>("release") {
                 groupId = "io.github.dononcharles"
                 artifactId = "nicetoast"
-                version = "1.0.0"
+                version = "1.0.1"
 
-                afterEvaluate {
-                    from(components["release"])
-                }
+                from(components["release"])
 
                 // --- Include the required POM metadata ---
                 // Maven Central requires this information.
                 pom {
-                    name.set("NiceToast") // Corrected the name from 'MotionToast' to 'NiceToast'
+                    name.set("NiceToast")
                     description.set("Nice Toast is a stunning and highly customizable toast library for Android written in Kotlin")
                     url.set("https://github.com/dononcharles/NiceToast")
                     licenses {
@@ -91,20 +97,12 @@ afterEvaluate {
             }
         }
     }
-    repositories {
-        // This is the staging repository where artifacts are sent before release
-        maven {
-            name = "sonatype" // A more standard name for this repository
-            val releasesRepoUrl = "https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/"
-            val snapshotsRepoUrl = "https://s01.oss.sonatype.org/content/repositories/snapshots/"
-            // Automatically select the correct URL based on the library's version string
-            url = uri(if (version.toString().endsWith("SNAPSHOT")) snapshotsRepoUrl else releasesRepoUrl)
+}
 
-            credentials {
-                // Read credentials securely from environment variables
-                username = System.getenv("OSSRH_USERNAME") // Using OSSRH prefix for clarity
-                password = System.getenv("OSSRH_TOKEN")
-            }
-        }
-    }
+signing {
+    useInMemoryPgpKeys(
+        System.getenv("GPG_SECRET_KEY"),
+        System.getenv("GPG_SECRET_KEY_PASSPHRASE")
+    )
+    sign(publishing.publications)
 }
