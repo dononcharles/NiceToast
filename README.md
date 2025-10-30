@@ -135,8 +135,8 @@ For more advanced control, you can use the `magicCreate` function, which allows 
 ```kotlin
 niceToast.magicCreate(
     activity = this,
-    title = "Low Battery",
-    message = "Your battery is running low. Please connect to a charger.",
+    title = getString(R.string.low_battery),
+    message = getString(R.string.your_battery_is_running_low_please_connect_to_a_charger),
     toastType = NiceToastType.WARNING,
     position = TOAST_GRAVITY_BOTTOM,
     duration = LONG_DURATION,
@@ -162,21 +162,29 @@ The library includes several predefined types:
 You can customize the look and feel of all toasts globally. This is perfect for matching the library to your app's brand colors. It's recommended to do this once in your `Application` class.
 
 ```kotlin
-// In your Application class's onCreate() method
-NiceToast().configure {
-    // Set custom colors (using @ColorRes)
-    successToastColor = R.color.my_app_success_color
-    errorToastColor = R.color.my_app_error_color
-    
-    // Set a custom background color for the side-bar style
-    infoBackgroundToastColor = R.color.my_app_info_background
+private fun setCustomizedNiceToastColors(useMyColor: Boolean) {
+    if (useMyColor) {
+        niceToast.configure {
+            setSuccessColor(R.color.success_color)
+            setSuccessBackgroundColor(R.color.success_bg_color)
 
-    // Set a custom animation for the icon (using @AnimRes)
-    customAnimRes = R.anim.my_custom_fade_in
+            setErrorColor(R.color.error_color)
+            setErrorBackgroundColor(R.color.error_bg_color)
+
+            setDeleteColor(R.color.delete_color)
+            setDeleteBackgroundColor(R.color.delete_bg_color)
+
+            setWarningColor(R.color.warning_color)
+            setWarningBackgroundColor(R.color.warning_bg_color)
+
+            setInfoColor(R.color.info_color)
+            setInfoBackgroundColor(R.color.info_bg_color)
+        }
+    } else {
+       // To reset all configurations to their default values
+        niceToast.resetAll()
+    }
 }
-
-// To reset all configurations to their default values
-NiceToast().resetAll()
 ```
 
 ## 💖 Buy Me a Coffee?
