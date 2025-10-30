@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">NiceToast</string>
+    <string name="text_success">Success</string>
+    <string name="text_error">Error</string>
+    <string name="text_info">Info</string>
+    <string name="text_warning">Warning</string>
+    <string name="text_no_internet">No internet connection</string>
+    <string name="mock_description">This is just the beginning</string>
+</resources>

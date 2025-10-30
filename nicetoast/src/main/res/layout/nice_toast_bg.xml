@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:id="@+id/niceToastBgCl"
+    android:layout_height="@dimen/dimen_100dp"
+    android:layout_margin="@dimen/dimen_24dp"
+    android:backgroundTint="@color/info_bg_color"
+    android:background="@drawable/round_bg">
+
+    <ImageView
+        android:id="@+id/toastImg"
+        android:layout_width="@dimen/dimen_48dp"
+        android:layout_height="@dimen/dimen_48dp"
+        android:layout_marginStart="@dimen/dimen_8dp"
+        android:contentDescription="@string/app_name"
+        android:src="@drawable/outline_info_24"
+        android:padding="@dimen/dimen_8dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/toastTitleTv"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/dimen_8dp"
+        android:layout_marginEnd="@dimen/dimen_8dp"
+        android:letterSpacing="0.10"
+        android:textStyle="bold"
+        android:text="@string/text_info"
+        android:textAllCaps="true"
+        android:textAppearance="@style/TextAppearance.MaterialComponents.Caption"
+        android:textColor="@color/black"
+        app:layout_constraintBottom_toTopOf="@id/toastDescTv"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/toastImg"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_chainStyle="packed" />
+
+    <TextView
+        android:id="@+id/toastDescTv"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dimen_4dp"
+        android:ellipsize="end"
+        android:maxLines="2"
+        android:text="@string/mock_description"
+        android:textAppearance="@style/TextAppearance.MaterialComponents.Body2"
+        android:textColor="@android:color/black"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@id/toastTitleTv"
+        app:layout_constraintStart_toStartOf="@id/toastTitleTv"
+        app:layout_constraintTop_toBottomOf="@id/toastTitleTv" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,0 +1,41 @@
+# This workflow will build and sign a new release of your library and publish it to Maven Central.
+# It is triggered manually by creating a new release in the GitHub UI.
+
+name: Publish Release to Maven Central
+
+on:
+  release:
+    types: [created] # This workflow runs when a new GitHub release is created
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+
+    steps:
+      # 1. Check out the repository code
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      # 2. Set up JDK 17
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+
+      # 3. Grant execute permission for gradlew
+      - name: Grant Gradlew executable permissions
+        run: chmod +x gradlew
+
+      # 4. Publish to Maven Central
+      - name: Publish release to Maven Central
+        env:
+          # These secrets are used by the build.gradle and gradle.properties files
+          CENTRAL_USERNAME: ${{ secrets.CENTRAL_USERNAME }}
+          CENTRAL_TOKEN: ${{ secrets.CENTRAL_TOKEN }}
+          GPG_SECRET_KEY: ${{ secrets.GPG_SECRET_KEY }}
+          GPG_SECRET_KEY_PASSPHRASE: ${{ secrets.GPG_SECRET_KEY_PASSPHRASE }}
+        run: |
+          # The Gradle command to build and publish the :nicetoast module
+          # -Pversion specifies the version from the Git tag of the release
+          ./gradlew :nicetoast:publishReleasePublicationToOSSRHRepository --info
