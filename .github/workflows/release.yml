@@ -41,11 +41,11 @@ jobs:
           distribution: 'temurin'
 
       # 3. Import GPG keys for signing
-      - name: Import GPG key
-        uses: crazy-max/ghaction-import-gpg@v6
-        with:
-          gpg_private_key: ${{ secrets.GPG_SECRET_KEY }}
-          passphrase: ${{ secrets.GPG_SECRET_KEY_PASSPHRASE }}
+      #- name: Import GPG key
+      #  uses: crazy-max/ghaction-import-gpg@v6
+      #  with:
+      #    gpg_private_key: ${{ secrets.GPG_SECRET_KEY }}
+      #    passphrase: ${{ secrets.GPG_SECRET_KEY_PASSPHRASE }}
 
       - name: Cache Gradle build
         uses: actions/cache@v3
@@ -76,7 +76,7 @@ jobs:
         run: |
           ./gradlew \
             -Pversion=${{ steps.version.outputs.version }} \
-            -PossrhUsername="${{ secrets.OSSRH_USERNAME }}" \
-            -PossrhPassword="${{ secrets.OSSRH_TOKEN }}" \
+            -PossrhUsername="$OSSRH_USERNAME" \
+            -PossrhPassword="$OSSRH_TOKEN" \
             :nicetoast:publishAllPublicationsToMavenCentralRepository \
             --no-daemon --stacktrace
