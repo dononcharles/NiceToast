@@ -95,10 +95,17 @@ afterEvaluate {
     }
 }
 
+// Prefer providers API (avoids eager System.getenv calls)
+val gpgKey = providers.environmentVariable("GPG_SECRET_KEY")
+val gpgPass = providers.environmentVariable("GPG_SECRET_KEY_PASSPHRASE")
+
 signing {
-    useInMemoryPgpKeys(
-        System.getenv("GPG_SECRET_KEY"),
-        System.getenv("GPG_SECRET_KEY_PASSPHRASE")
-    )
-    sign(publishing.publications)
+    val key = gpgKey.orNull
+    val pass = gpgPass.orNull
+    if (!key.isNullOrBlank() && !pass.isNullOrBlank()) {
+        useInMemoryPgpKeys(key, pass)
+        sign(publishing.publications["release"])
+    } else {
+        logger.warn("Signing disabled: missing GPG env vars")
+    }
 }
