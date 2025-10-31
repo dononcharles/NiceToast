@@ -13,11 +13,11 @@ version = project.property("PUBLISHING_VERSION") as String
 nexusPublishing {
     repositories {
         sonatype {
-            nexusUrl.set(uri("https://ossrh-staging-api.central.sonatype.com/service/local/"))
+           // nexusUrl.set(uri("https://ossrh-staging-api.central.sonatype.com/service/local/"))
             // Only set the snapshot repository URL if the version contains "SNAPSHOT"
-            if (project.version.toString().endsWith("SNAPSHOT", ignoreCase = true)) {
-                snapshotRepositoryUrl.set(uri("https://central.sonatype.com/repository/maven-snapshots/"))
-            }
+           // if (project.version.toString().endsWith("SNAPSHOT", ignoreCase = true)) {
+           //     snapshotRepositoryUrl.set(uri("https://central.sonatype.com/repository/maven-snapshots/"))
+          //  }
             username.set(System.getenv("OSSRH_USERNAME"))
             password.set(System.getenv("OSSRH_TOKEN"))
         }
