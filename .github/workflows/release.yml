@@ -50,10 +50,13 @@ jobs:
           VERSION="${RAW_TAG#v}"
           echo "version=$VERSION" >> "$GITHUB_OUTPUT"
 
-      - name: Fix escaped GPG key
-        run: |
-          echo "${{ secrets.GPG_SECRET_KEY }}" | sed 's/\\n/\n/g' > gpg_fixed.key
-          export ORG_GRADLE_PROJECT_signingInMemoryKey="$(cat gpg_fixed.key)"
+    # 4. Import and fix the GPG key
+      - name: Import GPG key
+        id: import_gpg
+        uses: crazy-max/ghaction-import-gpg@v6
+        with:
+          gpg_private_key: ${{ secrets.GPG_SECRET_KEY }}
+          passphrase: ${{ secrets.GPG_SECRET_KEY_PASSPHRASE }}
 
       # Optional: verify key import
       - name: Verify GPG key
