@@ -69,5 +69,7 @@ jobs:
           ./gradlew \
             -PmavenCentralUsername="$MAVEN_CENTRAL_USERNAME" \
             -PmavenCentralPassword="$MAVEN_CENTRAL_PASSWORD" \
+            -PsigningKey="$SIGNING_KEY" \
+            -PsigningPassword="$SIGNING_PASSWORD" \
             -Pversion=${{ steps.version.outputs.version }} \
            :nicetoast:publishToMavenCentral --info --stacktrace
