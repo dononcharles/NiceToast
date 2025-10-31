@@ -4,7 +4,6 @@ plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.android)
     id("com.vanniktech.maven.publish") version "0.34.0"
-    //id("signing")
 }
 
 android {
@@ -93,18 +92,3 @@ mavenPublishing {
         }
     }
 }
-
-// Get GPG keys from environment
-/*
-val gpgKey = providers.environmentVariable("GPG_SECRET_KEY").orNull
-val gpgPass = providers.environmentVariable("GPG_SECRET_KEY_PASSPHRASE").orNull
-
-signing {
-    if (!gpgKey.isNullOrBlank() && !gpgPass.isNullOrBlank()) {
-        useInMemoryPgpKeys(gpgKey, gpgPass)
-        sign(publishing.publications)
-    } else {
-        logger.warn("🔒 Signing disabled: missing GPG environment variables")
-    }
-}
-*/
