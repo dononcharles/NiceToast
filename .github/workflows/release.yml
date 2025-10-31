@@ -14,7 +14,6 @@ jobs:
     env:
       ORG_GRADLE_PROJECT_mavenCentralUsername: ${{ secrets.OSSRH_USERNAME }}
       ORG_GRADLE_PROJECT_mavenCentralPassword: ${{ secrets.OSSRH_TOKEN }}
-      ORG_GRADLE_PROJECT_signingInMemoryKey: ${{ secrets.GPG_SECRET_KEY }}
       ORG_GRADLE_PROJECT_signingInMemoryPassword: ${{ secrets.GPG_SECRET_KEY_PASSPHRASE }}
 
     steps:
@@ -65,7 +64,6 @@ jobs:
       # 5. Publish, Close, and Release to Maven Central
       - name: Publish Release to Maven Central
         env:
-          ORG_GRADLE_PROJECT_signingInMemoryKey: ${{ env.ORG_GRADLE_PROJECT_signingInMemoryKey }}
           ORG_GRADLE_PROJECT_signingInMemoryPassword: ${{ secrets.GPG_SECRET_KEY_PASSPHRASE }}
           ORG_GRADLE_PROJECT_mavenCentralUsername: ${{ secrets.OSSRH_USERNAME }}
           ORG_GRADLE_PROJECT_mavenCentralPassword: ${{ secrets.OSSRH_TOKEN }}

@@ -41,8 +41,8 @@ dependencies {
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
-    implementation(libs.androidx.junit.ktx)
 
+    testImplementation(libs.androidx.junit.ktx)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.runner)
     androidTestImplementation(libs.androidx.junit)
@@ -61,7 +61,7 @@ mavenPublishing {
     pom {
         name.set("NiceToast")
         description.set("Nice Toast is a stunning and highly customizable toast library for Android written in Kotlin.")
-        inceptionYear.set("2025")
+        inceptionYear.set("2024")
         url.set("https://github.com/dononcharles/NiceToast")
 
         licenses {
