@@ -10,8 +10,8 @@ plugins {
 nexusPublishing {
     repositories {
         sonatype {
-            // The plugin automatically uses the correct release or snapshot URL.
-            // It also automatically reads credentials from the environment variables below.
+            nexusUrl.set(uri("https://ossrh-staging-api.central.sonatype.com/service/local/"))
+            snapshotRepositoryUrl.set(uri("https://central.sonatype.com/repository/maven-snapshots/"))
             username.set(System.getenv("OSSRH_USERNAME"))
             password.set(System.getenv("OSSRH_TOKEN"))
         }
