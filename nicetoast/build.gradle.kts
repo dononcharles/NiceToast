@@ -7,6 +7,9 @@ plugins {
     id("signing")
 }
 
+group = "io.github.dononcharles"
+version = "1.0.1"
+
 android {
     namespace = "com.dononcharles.nicetoast"
     compileSdk = 36
@@ -32,6 +35,7 @@ android {
         compilerOptions {
             jvmTarget.set(JvmTarget.JVM_17)
         }
+        jvmToolchain(17)
     }
     buildFeatures {
         viewBinding = true
@@ -52,11 +56,7 @@ dependencies {
 
 mavenPublishing {
     // ✅ Define your coordinates (groupId, artifactId, version)
-    coordinates(
-        groupId = project.group.toString(),
-        artifactId = "nicetoast",
-        version = project.version.toString()
-    )
+    coordinates(artifactId = "nicetoast")
 
     // ✅ POM metadata (required by Central)
     pom {
@@ -89,13 +89,9 @@ mavenPublishing {
 
     // ✅ This automatically configures publishing to the new Central Portal API
     publishToMavenCentral()
-
-    // ✅ Automatically signs all publications using environment GPG vars
-   // signAllPublications()
 }
 
 signing {
     useGpgCmd()
-
     sign(publishing.publications)
 }

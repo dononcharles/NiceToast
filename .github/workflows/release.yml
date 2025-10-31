@@ -1,6 +1,3 @@
-# This workflow will build and sign a new release of your library and publish it to Maven Central.
-# It is triggered manually by creating a new release in the GitHub UI.
-
 name: Publish Release to Maven Central
 
 on:
@@ -27,7 +24,7 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
 
-      # Cache Gradle dependencies
+      # 3. Cache Gradle dependencies
       - name: Cache Gradle build
         uses: actions/cache@v3
         with:
@@ -37,10 +34,11 @@ jobs:
           key: gradle-${{ runner.os }}-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
           restore-keys: gradle-${{ runner.os }}-
 
-      # 3. Grant execute permission for gradlew
+      # 4. Grant execute permission for gradlew
       - name: Grant Gradlew executable permissions
         run: chmod +x gradlew
 
+      # 5. Derive version from tag
       - name: Derive version from tag
         id: version
         run: |
@@ -48,7 +46,7 @@ jobs:
           VERSION="${RAW_TAG#v}"
           echo "version=$VERSION" >> "$GITHUB_OUTPUT"
 
-    # 4. Import and fix the GPG key
+      # 6. Import and fix the GPG key
       - name: Import GPG key
         id: import_gpg
         uses: crazy-max/ghaction-import-gpg@v6
@@ -56,10 +54,7 @@ jobs:
           gpg_private_key: ${{ secrets.GPG_SECRET_KEY }}
           passphrase: ${{ secrets.GPG_SECRET_KEY_PASSPHRASE }}
 
-      # Optional: verify key import
-      - name: Verify GPG key
-        run: gpg --list-secret-keys
-
+        # 7. Write signing config to gradle.properties
       - name: Write signing config
         run: |
           KEY_ID=$(gpg --list-secret-keys --keyid-format=long | awk '/sec/ {print $2}' | sed 's|^.*/||' | head -n1)
@@ -69,7 +64,7 @@ jobs:
           echo "signing.gnupg.passphrase=${{ secrets.GPG_SECRET_KEY_PASSPHRASE }}"
           } >> gradle.properties
 
-      # 5. Publish, Close, and Release to Maven Central
+      # 8. Publish, Close, and Release to Maven Central
       - name: Publish Release to Maven Central
         env:
           ORG_GRADLE_PROJECT_mavenCentralUsername: ${{ secrets.OSSRH_USERNAME }}
