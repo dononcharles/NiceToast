@@ -73,7 +73,7 @@ jobs:
         run: |
           ./gradlew \
             -Pversion=${{ steps.version.outputs.version }} \
-            :nicetoast:publishAllPublicationsToMavenCentralRepository \
+            :nicetoast:publishToMavenCentral \
             --no-parallel --stacktrace --continue
           
           
