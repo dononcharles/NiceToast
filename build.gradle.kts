@@ -1,21 +1,16 @@
-import java.net.http.HttpClient
-import java.net.http.HttpRequest
-import java.net.http.HttpResponse
-import java.util.Base64
-
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
 plugins {
     alias(libs.plugins.android.application) apply false
     alias(libs.plugins.kotlin.android) apply false
     alias(libs.plugins.android.library) apply false
     alias (libs.plugins.kotlin.compose) apply false
-    alias(libs.plugins.nexus.publish)
+   // alias(libs.plugins.nexus.publish)
 }
 
 group = project.property("PUBLISHING_GROUP") as String
 version = project.property("PUBLISHING_VERSION") as String
 
-nexusPublishing {
+/*nexusPublishing {
     repositories {
         sonatype {
             nexusUrl.set(uri("https://ossrh-staging-api.central.sonatype.com/service/local/staging/deploy/maven2/"))
@@ -57,4 +52,4 @@ tasks.register("publishToMavenCentral") {
             logger.error("Upload failed (${response.statusCode()}): ${response.body()}")
         }
     }
-}
+}*/

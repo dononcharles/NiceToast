@@ -59,6 +59,10 @@ dependencies {
     androidTestImplementation(libs.androidx.espresso.core)
 }
 
+publishing {
+
+}
+
 afterEvaluate {
     publishing {
         publications {
@@ -90,6 +94,18 @@ afterEvaluate {
                     }
                 }
 
+            }
+        }
+
+        repositories {
+            maven {
+                name = "OSSRH Repository"
+                // ✅ New API endpoint — no staging
+                url = uri("https://central.sonatype.com/api/v1/publish")
+                credentials {
+                    username = System.getenv("OSSRH_USERNAME")
+                    password = System.getenv("OSSRH_TOKEN")
+                }
             }
         }
     }
