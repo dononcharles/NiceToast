@@ -4,18 +4,15 @@ plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.android)
     id("com.vanniktech.maven.publish") version "0.34.0"
-    id("signing")
+  //  id("signing")
 }
 
 android {
     namespace = "com.dononcharles.nicetoast"
-    compileSdk {
-        version = release(36)
-    }
+    compileSdk = 36
 
     defaultConfig {
         minSdk = 24
-
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles("consumer-rules.pro")
     }
@@ -62,15 +59,16 @@ mavenPublishing {
 
     // ✅ Define your coordinates (groupId, artifactId, version)
     coordinates(
-        project.group.toString(),
-        "nicetoast",
-        project.version.toString()
+        groupId = project.group.toString(),
+        artifactId = "nicetoast",
+        version = project.version.toString()
     )
 
     // ✅ POM metadata (required by Central)
     pom {
         name.set("NiceToast")
         description.set("Nice Toast is a stunning and highly customizable toast library for Android written in Kotlin.")
+        inceptionYear.set("2025")
         url.set("https://github.com/dononcharles/NiceToast")
 
         licenses {
@@ -97,6 +95,7 @@ mavenPublishing {
 }
 
 // Get GPG keys from environment
+/*
 val gpgKey = providers.environmentVariable("GPG_SECRET_KEY").orNull
 val gpgPass = providers.environmentVariable("GPG_SECRET_KEY_PASSPHRASE").orNull
 
@@ -107,4 +106,4 @@ signing {
     } else {
         logger.warn("🔒 Signing disabled: missing GPG environment variables")
     }
-}
+}*/

@@ -62,7 +62,7 @@ jobs:
           echo "version=$VERSION" >> "$GITHUB_OUTPUT"
 
       # 4. Import GPG key for artifact signing
-      - name: Set up GPG
+      - name: Import GPG Keys
         uses: crazy-max/ghaction-import-gpg@v6
         with:
           gpg_private_key: ${{ secrets.GPG_SECRET_KEY }}
@@ -85,8 +85,5 @@ jobs:
             -Pversion=${{ steps.version.outputs.version }} \
             -PossrhUsername="$OSSRH_USERNAME" \
             -PossrhPassword="$OSSRH_TOKEN" \
-            -Psigning.keyId="${{ secrets.GPG_SIGNING_KEY_ID }}" \
-            -Psigning.password="${{ secrets.GPG_SECRET_KEY_PASSPHRASE }}" \
-            -Psigning.secretKeyRingFile="${{ env.GPG_SECRET_KEY }}" \
-            :nicetoast:publishToMavenCentral \
-            --info --stacktrace
+            :nicetoast:publishAllPublicationsToMavenCentralRepository \
+            --no-parallel --stacktrace
