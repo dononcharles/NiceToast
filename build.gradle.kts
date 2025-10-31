@@ -7,6 +7,9 @@ plugins {
     alias(libs.plugins.nexus.publish)
 }
 
+group = project.property("PUBLISHING_GROUP") as String
+version = project.property("PUBLISHING_VERSION") as String
+
 nexusPublishing {
     repositories {
         sonatype {
