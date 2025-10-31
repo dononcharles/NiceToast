@@ -72,7 +72,7 @@ jobs:
         run: |
           ./gradlew \
             -Pversion=${{ steps.version.outputs.version }} \
-            :nicetoast:publish --no-daemon --stacktrace
+            :nicetoast:publishAllPublicationsToMavenCentralRepository --no-daemon --stacktrace
           
           
           

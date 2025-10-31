@@ -3,7 +3,7 @@ import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.android)
-    id("maven-publish")
+    id("com.vanniktech.maven.publish") version "0.34.0"
     id("signing")
 }
 
@@ -59,67 +59,45 @@ dependencies {
     androidTestImplementation(libs.androidx.espresso.core)
 }
 
-publishing {
+mavenPublishing {
+    // ✅ This automatically configures publishing to the new Central Portal API
+    publishToMavenCentral()
 
-}
+    // ✅ Automatically signs all publications using environment GPG vars
+    signAllPublications()
 
-afterEvaluate {
-    publishing {
-        publications {
-            create<MavenPublication>("release") {
-                from(components["release"])
-                artifactId = "nicetoast"
+    // ✅ Define your coordinates (groupId, artifactId, version)
+    coordinates(
+        project.group.toString(),
+        "nicetoast",
+        project.version.toString()
+    )
 
-                pom {
-                    name.set("NiceToast")
-                    description.set("Nice Toast is a stunning and highly customizable toast library for Android written in Kotlin")
-                    url.set("https://github.com/dononcharles/NiceToast")
-                    licenses {
-                        license {
-                            name.set("The Apache License, Version 2.0")
-                            url.set("http://www.apache.org/licenses/LICENSE-2.0.txt")
-                        }
-                    }
-                    developers {
-                        developer {
-                            id.set("dononcharles")
-                            name.set("Komi Donon")
-                            email.set("dononcharles@gmail.com")
-                        }
-                    }
-                    scm {
-                        connection.set("scm:git:github.com/dononcharles/NiceToast.git")
-                        developerConnection.set("scm:git:ssh://github.com/dononcharles/NiceToast.git")
-                        url.set("https://github.com/dononcharles/NiceToast")
-                    }
-                }
+    // ✅ POM metadata (required by Central)
+    pom {
+        name.set("NiceToast")
+        description.set("Nice Toast is a stunning and highly customizable toast library for Android written in Kotlin.")
+        url.set("https://github.com/dononcharles/NiceToast")
 
+        licenses {
+            license {
+                name.set("The Apache License, Version 2.0")
+                url.set("http://www.apache.org/licenses/LICENSE-2.0.txt")
             }
         }
 
-        repositories {
-            maven {
-                name = "OSSRH Repository"
-                // ✅ New API endpoint — no staging
-                url = uri("https://central.sonatype.com/api/v1/publish")
-                credentials {
-                    username = System.getenv("OSSRH_USERNAME")
-                    password = System.getenv("OSSRH_TOKEN")
-                }
+        developers {
+            developer {
+                id.set("dononcharles")
+                name.set("Komi Donon")
+                email.set("dononcharles@gmail.com")
             }
         }
-    }
-}
 
-// Get GPG keys from environment
-val gpgKey = providers.environmentVariable("GPG_SECRET_KEY").orNull
-val gpgPass = providers.environmentVariable("GPG_SECRET_KEY_PASSPHRASE").orNull
-
-signing {
-    if (!gpgKey.isNullOrBlank() && !gpgPass.isNullOrBlank()) {
-        useInMemoryPgpKeys(gpgKey, gpgPass)
-        sign(publishing.publications)
-    } else {
-        logger.warn("🔒 Signing disabled: missing GPG environment variables")
+        scm {
+            connection.set("scm:git:https://github.com/dononcharles/NiceToast.git")
+            developerConnection.set("scm:git:ssh://github.com/dononcharles/NiceToast.git")
+            url.set("https://github.com/dononcharles/NiceToast")
+        }
     }
 }
