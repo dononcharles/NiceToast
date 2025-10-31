@@ -4,6 +4,7 @@ plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.android)
     id("com.vanniktech.maven.publish")
+    id("signing")
 }
 
 android {
@@ -90,5 +91,11 @@ mavenPublishing {
     publishToMavenCentral()
 
     // ✅ Automatically signs all publications using environment GPG vars
-    signAllPublications()
+   // signAllPublications()
+}
+
+signing {
+    useGpgCmd()
+
+    sign(publishing.publications)
 }
