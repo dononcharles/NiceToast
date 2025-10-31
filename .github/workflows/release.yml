@@ -40,6 +40,13 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
 
+      # 3. Import GPG keys for signing
+      - name: Import GPG key
+        uses: crazy-max/ghaction-import-gpg@v6
+        with:
+          gpg_private_key: ${{ secrets.GPG_SECRET_KEY }}
+          passphrase: ${{ secrets.GPG_SECRET_KEY_PASSPHRASE }}
+
       - name: Cache Gradle build
         uses: actions/cache@v3
         with:
@@ -60,35 +67,16 @@ jobs:
           VERSION="${RAW_TAG#v}"
           echo "version=$VERSION" >> "$GITHUB_OUTPUT"
 
-      # 4. Import GPG key for artifact signing
-      - name: Import GPG Keys
-        uses: crazy-max/ghaction-import-gpg@v6
-        with:
-          gpg_private_key: ${{ secrets.GPG_SECRET_KEY }}
-          passphrase: ${{ secrets.GPG_SECRET_KEY_PASSPHRASE }}
-
       # Optional: verify key import
       - name: Verify GPG key
         run: gpg --list-secret-keys
 
       # 5. Publish, Close, and Release to Maven Central
       - name: Publish Release to Maven Central
-       # env:
-          # Use names that clearly map to the Sonatype OSSRH service
-       #   OSSRH_USERNAME: ${{ secrets.OSSRH_USERNAME }} #Your Sonatype OSSRH username
-       #   OSSRH_TOKEN: ${{ secrets.OSSRH_TOKEN }} #Your Sonatype OSSRH password or token
-        #  GPG_SECRET_KEY: ${{ secrets.GPG_SECRET_KEY }}
-       #   GPG_SIGNING_KEY_ID: ${{ secrets.GPG_SIGNING_KEY_ID }} #The last 8 characters of your GPG key ID
-        #  GPG_SECRET_KEY_PASSPHRASE: ${{ secrets.GPG_SECRET_KEY_PASSPHRASE }} #Your GPG key passphrase
-
-      #If you keep useInMemoryPgpKeys in build.gradle.kts, you can omit the three -Psigning.* properties
-      # and just export GPG_SECRET_KEY / GPG_SECRET_KEY_PASSPHRASE.
         run: |
           ./gradlew \
             -Pversion=${{ steps.version.outputs.version }} \
             -PossrhUsername="${{ secrets.OSSRH_USERNAME }}" \
             -PossrhPassword="${{ secrets.OSSRH_TOKEN }}" \
-            -Psigning.gnupg.keyName="${{ secrets.GPG_SIGNING_KEY_ID }}" \
-            -Psigning.gnupg.passphrase="${{ secrets.GPG_SECRET_KEY_PASSPHRASE }}" \
             :nicetoast:publishAllPublicationsToMavenCentralRepository \
             --no-daemon --stacktrace
