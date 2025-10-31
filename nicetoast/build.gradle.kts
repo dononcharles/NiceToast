@@ -53,6 +53,14 @@ dependencies {
     androidTestImplementation(libs.androidx.espresso.core)
 }
 
+val isCi = System.getenv("CI") != null
+
+if (isCi) {
+    tasks.withType<Javadoc>().configureEach {
+        enabled = false
+    }
+}
+
 mavenPublishing {
     // ✅ This automatically configures publishing to the new Central Portal API
     publishToMavenCentral()

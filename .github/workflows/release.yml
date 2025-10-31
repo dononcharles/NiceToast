@@ -66,13 +66,15 @@ jobs:
           GPG_SECRET_KEY: ${{ secrets.GPG_SECRET_KEY }}
           GPG_SIGNING_KEY_ID: ${{ secrets.GPG_SIGNING_KEY_ID }} #The last 8 characters of your GPG key ID
           GPG_SECRET_KEY_PASSPHRASE: ${{ secrets.GPG_SECRET_KEY_PASSPHRASE }} #Your GPG key passphrase
+          CI: true
 
       #If you keep useInMemoryPgpKeys in build.gradle.kts, you can omit the three -Psigning.* properties
       # and just export GPG_SECRET_KEY / GPG_SECRET_KEY_PASSPHRASE.
         run: |
           ./gradlew \
             -Pversion=${{ steps.version.outputs.version }} \
-            :nicetoast:publishAllPublicationsToMavenCentralRepository --no-daemon --stacktrace
+            :nicetoast:publishAllPublicationsToMavenCentralRepository \
+            --no-parallel --stacktrace
           
           
           
