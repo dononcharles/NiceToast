@@ -75,11 +75,8 @@ jobs:
             -Pversion=${{ steps.version.outputs.version }} \
             -PossrhUsername="$OSSRH_USERNAME" \
             -PossrhPassword="$OSSRH_TOKEN" \
-            -Psigning.keyId="$GPG_SIGNING_KEY_ID" \
-            -Psigning.password="$GPG_SECRET_KEY_PASSPHRASE" \
-            -Psigning.secretKeyRingFile="$(echo "$GPG_SECRET_KEY" | base64 --decode | gpg --batch --import >/dev/null 2>&1; gpg --export-secret-keys --output /tmp/secring.gpg; echo /tmp/secring.gpg)" \
             :nicetoast:publishToMavenCentral \
-            --no-parallel --stacktrace
+            --info --stacktrace
           
           
           
