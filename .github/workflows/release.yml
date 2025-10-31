@@ -54,7 +54,6 @@ jobs:
         run: |
           echo "${{ secrets.GPG_SECRET_KEY }}" | sed 's/\\n/\n/g' > gpg_fixed.key
           export ORG_GRADLE_PROJECT_signingInMemoryKey="$(cat gpg_fixed.key)"
-        shell: bash
 
       # Optional: verify key import
       - name: Verify GPG key
