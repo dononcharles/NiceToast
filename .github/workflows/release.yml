@@ -12,11 +12,10 @@ jobs:
     runs-on: ubuntu-latest
 
     env:
-      OSSRH_USERNAME: ${{ secrets.OSSRH_USERNAME }}
-      OSSRH_TOKEN: ${{ secrets.OSSRH_TOKEN }}
-      GPG_SECRET_KEY: ${{ secrets.GPG_SECRET_KEY }}
-      GPG_SECRET_KEY_PASSPHRASE: ${{ secrets.GPG_SECRET_KEY_PASSPHRASE }}
-      GPG_SIGNING_KEY_ID: ${{ secrets.GPG_SIGNING_KEY_ID }}
+      MAVEN_CENTRAL_USERNAME: ${{ secrets.OSSRH_USERNAME }}
+      MAVEN_CENTRAL_PASSWORD: ${{ secrets.OSSRH_TOKEN }}
+      SIGNING_KEY: ${{ secrets.GPG_SECRET_KEY }}
+      SIGNING_PASSWORD: ${{ secrets.GPG_SECRET_KEY_PASSPHRASE }}
 
     steps:
       # 1. Check out the repository code
@@ -39,13 +38,7 @@ jobs:
         with:
           java-version: '17'
           distribution: 'temurin'
-
-      # 3. Import GPG keys for signing
-      #- name: Import GPG key
-      #  uses: crazy-max/ghaction-import-gpg@v6
-      #  with:
-      #    gpg_private_key: ${{ secrets.GPG_SECRET_KEY }}
-      #    passphrase: ${{ secrets.GPG_SECRET_KEY_PASSPHRASE }}
+          cache: 'gradle'
 
       - name: Cache Gradle build
         uses: actions/cache@v3
@@ -75,8 +68,7 @@ jobs:
       - name: Publish Release to Maven Central
         run: |
           ./gradlew \
+            -PmavenCentralUsername="$MAVEN_CENTRAL_USERNAME" \
+            -PmavenCentralPassword="$MAVEN_CENTRAL_PASSWORD" \
             -Pversion=${{ steps.version.outputs.version }} \
-            -PossrhUsername="$OSSRH_USERNAME" \
-            -PossrhPassword="$OSSRH_TOKEN" \
-            :nicetoast:publishAllPublicationsToMavenCentralRepository \
-            --no-daemon --stacktrace
+           :nicetoast:publishToMavenCentral --info --stacktrace
