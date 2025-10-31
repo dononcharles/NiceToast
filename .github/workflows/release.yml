@@ -39,7 +39,6 @@ jobs:
         with:
           java-version: '17'
           distribution: 'temurin'
-          cache: gradle
 
       - name: Cache Gradle build
         uses: actions/cache@v3
@@ -68,8 +67,14 @@ jobs:
           gpg_private_key: ${{ secrets.GPG_SECRET_KEY }}
           passphrase: ${{ secrets.GPG_SECRET_KEY_PASSPHRASE }}
 
+      # Optional: verify key import
+      - name: Verify GPG key
+        run: gpg --list-secret-keys
+
       # 5. Publish, Close, and Release to Maven Central
       - name: Publish Release to Maven Central
+        env:
+          ORG_GRADLE_PROJECT_signing.gnupg.keyName: ${{ secrets.GPG_SIGNING_KEY_ID }}
        # env:
           # Use names that clearly map to the Sonatype OSSRH service
        #   OSSRH_USERNAME: ${{ secrets.OSSRH_USERNAME }} #Your Sonatype OSSRH username
