@@ -92,4 +92,4 @@ jobs:
             -PossrhUsername="$OSSRH_USERNAME" \
             -PossrhPassword="$OSSRH_TOKEN" \
             :nicetoast:publishAllPublicationsToMavenCentralRepository \
-            --no-parallel --stacktrace
+            --no-daemon --stacktrace
