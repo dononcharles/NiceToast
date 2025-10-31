@@ -75,6 +75,7 @@ jobs:
       - name: Publish Release to Maven Central
         env:
           ORG_GRADLE_PROJECT_signing.gnupg.keyName: ${{ secrets.GPG_SIGNING_KEY_ID }}
+          ORG_GRADLE_PROJECT_signing.gnupg.passphrase: ${{ secrets.GPG_SECRET_KEY_PASSPHRASE }}
        # env:
           # Use names that clearly map to the Sonatype OSSRH service
        #   OSSRH_USERNAME: ${{ secrets.OSSRH_USERNAME }} #Your Sonatype OSSRH username
