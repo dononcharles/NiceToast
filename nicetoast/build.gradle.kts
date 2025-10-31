@@ -102,7 +102,7 @@ val gpgPass = providers.environmentVariable("GPG_SECRET_KEY_PASSPHRASE").orNull
 signing {
     if (!gpgKey.isNullOrBlank() && !gpgPass.isNullOrBlank()) {
         useInMemoryPgpKeys(gpgKey, gpgPass)
-        sign(publishing.publications["release"])
+        sign(publishing.publications)
     } else {
         logger.warn("🔒 Signing disabled: missing GPG environment variables")
     }
