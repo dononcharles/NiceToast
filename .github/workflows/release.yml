@@ -72,7 +72,7 @@ jobs:
         run: |
           ./gradlew \
             -Pversion=${{ steps.version.outputs.version }} \
-            :nicetoast:publishToSonatype closeAndReleaseSonatypeStagingRepository --no-daemon --stacktrace
+            :nicetoast:publish --no-daemon --stacktrace
           
           
           
