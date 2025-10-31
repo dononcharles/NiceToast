@@ -50,12 +50,23 @@ jobs:
           VERSION="${RAW_TAG#v}"
           echo "version=$VERSION" >> "$GITHUB_OUTPUT"
 
+      - name: Fix escaped GPG key
+        run: |
+          echo "${{ secrets.GPG_SECRET_KEY }}" | sed 's/\\n/\n/g' > gpg_fixed.key
+          export ORG_GRADLE_PROJECT_signingInMemoryKey="$(cat gpg_fixed.key)"
+        shell: bash
+
       # Optional: verify key import
       - name: Verify GPG key
         run: gpg --list-secret-keys
 
       # 5. Publish, Close, and Release to Maven Central
       - name: Publish Release to Maven Central
+        env:
+          ORG_GRADLE_PROJECT_signingInMemoryKey: ${{ env.ORG_GRADLE_PROJECT_signingInMemoryKey }}
+          ORG_GRADLE_PROJECT_signingInMemoryPassword: ${{ secrets.GPG_SECRET_KEY_PASSPHRASE }}
+          ORG_GRADLE_PROJECT_mavenCentralUsername: ${{ secrets.OSSRH_USERNAME }}
+          ORG_GRADLE_PROJECT_mavenCentralPassword: ${{ secrets.OSSRH_TOKEN }}
         run: |
           ./gradlew clean \
             -Pversion=${{ steps.version.outputs.version }} \
