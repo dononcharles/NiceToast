@@ -24,7 +24,7 @@ jobs:
 
       - name: Validate required secrets
         run: |
-          for v in OSSRH_USERNAME OSSRH_TOKEN GPG_SECRET_KEY GPG_SECRET_KEY_PASSPHRASE GPG_SIGNING_KEY_ID; do
+          for v in MAVEN_CENTRAL_USERNAME MAVEN_CENTRAL_PASSWORD SIGNING_KEY SIGNING_PASSWORD; do
             if [ -z "${!v}" ]; then
               echo "Missing secret: $v" >&2
               exit 1
