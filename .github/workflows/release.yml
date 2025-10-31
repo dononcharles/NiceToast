@@ -68,9 +68,6 @@ jobs:
           gpg_private_key: ${{ secrets.GPG_SECRET_KEY }}
           passphrase: ${{ secrets.GPG_SECRET_KEY_PASSPHRASE }}
 
-      - name: Decode GPG key
-        run: echo "$GPG_SECRET_KEY" | base64 --decode > private.key
-
       # 5. Publish, Close, and Release to Maven Central
       - name: Publish Release to Maven Central
        # env:
@@ -79,16 +76,17 @@ jobs:
        #   OSSRH_TOKEN: ${{ secrets.OSSRH_TOKEN }} #Your Sonatype OSSRH password or token
         #  GPG_SECRET_KEY: ${{ secrets.GPG_SECRET_KEY }}
        #   GPG_SIGNING_KEY_ID: ${{ secrets.GPG_SIGNING_KEY_ID }} #The last 8 characters of your GPG key ID
-       #   GPG_SECRET_KEY_PASSPHRASE: ${{ secrets.GPG_SECRET_KEY_PASSPHRASE }} #Your GPG key passphrase
+        #  GPG_SECRET_KEY_PASSPHRASE: ${{ secrets.GPG_SECRET_KEY_PASSPHRASE }} #Your GPG key passphrase
 
       #If you keep useInMemoryPgpKeys in build.gradle.kts, you can omit the three -Psigning.* properties
       # and just export GPG_SECRET_KEY / GPG_SECRET_KEY_PASSPHRASE.
         run: |
           ./gradlew \
-            -Psigning.keyId="$GPG_SIGNING_KEY_ID" \
-            -Psigning.password="$GPG_SECRET_KEY_PASSPHRASE" \
-            -Psigning.secretKeyRingFile=private.key \
+            -Pversion=${{ steps.version.outputs.version }} \
             -PossrhUsername="$OSSRH_USERNAME" \
-            -PossrhPassword="$OSSRH_PASSWORD" \
-            :nicetoast:publishAllPublicationsToMavenCentralRepository \
-            --no-parallel --stacktrace
+            -PossrhPassword="$OSSRH_TOKEN" \
+            -Psigning.keyId="${{ secrets.GPG_SIGNING_KEY_ID }}" \
+            -Psigning.password="${{ secrets.GPG_SECRET_KEY_PASSPHRASE }}" \
+            -Psigning.secretKeyRingFile="${{ env.GPG_SECRET_KEY }}" \
+            :nicetoast:publishToMavenCentral \
+            --info --stacktrace
