@@ -5,32 +5,22 @@ name: Publish Release to Maven Central
 
 on:
   release:
-    types: [created] # This workflow runs when a new GitHub release is created
+    types: [ created ] # This workflow runs when a new GitHub release is created
 
 jobs:
   publish:
     runs-on: ubuntu-latest
 
     env:
-      MAVEN_CENTRAL_USERNAME: ${{ secrets.OSSRH_USERNAME }}
-      MAVEN_CENTRAL_PASSWORD: ${{ secrets.OSSRH_TOKEN }}
-      SIGNING_KEY: ${{ secrets.GPG_SECRET_KEY }}
-      SIGNING_PASSWORD: ${{ secrets.GPG_SECRET_KEY_PASSPHRASE }}
+      ORG_GRADLE_PROJECT_mavenCentralUsername: ${{ secrets.OSSRH_USERNAME }}
+      ORG_GRADLE_PROJECT_mavenCentralPassword: ${{ secrets.OSSRH_TOKEN }}
+      ORG_GRADLE_PROJECT_signingInMemoryKey: ${{ secrets.GPG_SECRET_KEY }}
+      ORG_GRADLE_PROJECT_signingInMemoryPassword: ${{ secrets.GPG_SECRET_KEY_PASSPHRASE }}
 
     steps:
       # 1. Check out the repository code
       - name: Check out repository
         uses: actions/checkout@v4
-
-      - name: Validate required secrets
-        run: |
-          for v in MAVEN_CENTRAL_USERNAME MAVEN_CENTRAL_PASSWORD SIGNING_KEY SIGNING_PASSWORD; do
-            if [ -z "${!v}" ]; then
-              echo "Missing secret: $v" >&2
-              exit 1
-            fi
-          done
-       
 
       # 2. Set up JDK 17
       - name: Set up JDK 17
@@ -39,6 +29,7 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
 
+      # Cache Gradle dependencies
       - name: Cache Gradle build
         uses: actions/cache@v3
         with:
@@ -66,10 +57,7 @@ jobs:
       # 5. Publish, Close, and Release to Maven Central
       - name: Publish Release to Maven Central
         run: |
-          ./gradlew \
-            -PmavenCentralUsername="$MAVEN_CENTRAL_USERNAME" \
-            -PmavenCentralPassword="$MAVEN_CENTRAL_PASSWORD" \
-            -PsigningKey="$SIGNING_KEY" \
-            -PsigningPassword="$SIGNING_PASSWORD" \
+          ./gradlew clean \
             -Pversion=${{ steps.version.outputs.version }} \
-           :nicetoast:publishToMavenCentral --info --stacktrace
+            publishAllPublicationsToMavenCentral \
+            --no-daemon --stacktrace

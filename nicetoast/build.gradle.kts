@@ -3,7 +3,7 @@ import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.android)
-    id("com.vanniktech.maven.publish") version "0.34.0"
+    id("com.vanniktech.maven.publish")
 }
 
 android {
@@ -50,12 +50,6 @@ dependencies {
 }
 
 mavenPublishing {
-    // ✅ This automatically configures publishing to the new Central Portal API
-    publishToMavenCentral()
-
-    // ✅ Automatically signs all publications using environment GPG vars
-    signAllPublications()
-
     // ✅ Define your coordinates (groupId, artifactId, version)
     coordinates(
         groupId = project.group.toString(),
@@ -91,4 +85,10 @@ mavenPublishing {
             url.set("https://github.com/dononcharles/NiceToast")
         }
     }
+
+    // ✅ This automatically configures publishing to the new Central Portal API
+    publishToMavenCentral()
+
+    // ✅ Automatically signs all publications using environment GPG vars
+    signAllPublications()
 }
