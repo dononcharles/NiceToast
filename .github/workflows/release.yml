@@ -31,11 +31,6 @@ jobs:
           GPG_SECRET_KEY_PASSPHRASE: ${{ secrets.GPG_SECRET_KEY_PASSPHRASE }}
           GPG_SIGNING_KEY_ID: ${{ secrets.GPG_SIGNING_KEY_ID }}
 
-      - name: Debug env
-        run: |
-          [ -z "$GPG_SECRET_KEY" ] && echo "Missing key" && exit 1
-          echo "Key size: ${#GPG_SECRET_KEY}"
-
       # 2. Set up JDK 17
       - name: Set up JDK 17
         uses: actions/setup-java@v4
@@ -70,7 +65,7 @@ jobs:
           OSSRH_TOKEN: ${{ secrets.OSSRH_TOKEN }} #Your Sonatype OSSRH password or token
           GPG_SECRET_KEY: ${{ secrets.GPG_SECRET_KEY }}
           GPG_SIGNING_KEY_ID: ${{ secrets.GPG_SIGNING_KEY_ID }} #The last 8 characters of your GPG key ID
-          SIGNING_PASSWORD: ${{ secrets.GPG_SECRET_KEY_PASSPHRASE }} #Your GPG key passphrase
+          GPG_SECRET_KEY_PASSPHRASE: ${{ secrets.GPG_SECRET_KEY_PASSPHRASE }} #Your GPG key passphrase
 
       #If you keep useInMemoryPgpKeys in build.gradle.kts, you can omit the three -Psigning.* properties
       # and just export GPG_SECRET_KEY / GPG_SECRET_KEY_PASSPHRASE.
