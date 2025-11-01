@@ -7,8 +7,6 @@ The table below lists which versions of this project are currently supported wit
 | Version | Supported          |
 | -------- | ------------------ |
 | 1.0.1    | :white_check_mark: |
-| 1.0.0    | :x:                |
-| < 1.0.0  | :x:                |
 
 ---
 
