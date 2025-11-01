@@ -1,35 +1,21 @@
-# This workflow will build and sign a new release of your library and publish it to Maven Central.
-# It is triggered manually by creating a new release in the GitHub UI.
-
 name: Publish Release to Maven Central
 
 on:
   release:
-    types: [created] # This workflow runs when a new GitHub release is created
+    types: [ created ] # This workflow runs when a new GitHub release is created
 
 jobs:
   publish:
     runs-on: ubuntu-latest
 
+    env:
+      ORG_GRADLE_PROJECT_mavenCentralUsername: ${{ secrets.OSSRH_USERNAME }}
+      ORG_GRADLE_PROJECT_mavenCentralPassword: ${{ secrets.OSSRH_TOKEN }}
+
     steps:
       # 1. Check out the repository code
       - name: Check out repository
         uses: actions/checkout@v4
-
-      - name: Validate required secrets
-        run: |
-          for v in OSSRH_USERNAME OSSRH_TOKEN GPG_SECRET_KEY GPG_SECRET_KEY_PASSPHRASE GPG_SIGNING_KEY_ID; do
-            if [ -z "${!v}" ]; then
-              echo "Missing secret: $v" >&2
-              exit 1
-            fi
-          done
-        env:
-          OSSRH_USERNAME: ${{ secrets.OSSRH_USERNAME }}
-          OSSRH_TOKEN: ${{ secrets.OSSRH_TOKEN }}
-          GPG_SECRET_KEY: ${{ secrets.GPG_SECRET_KEY }}
-          GPG_SECRET_KEY_PASSPHRASE: ${{ secrets.GPG_SECRET_KEY_PASSPHRASE }}
-          SIGNING_KEY_ID: ${{ secrets.GPG_SIGNING_KEY_ID }}
 
       # 2. Set up JDK 17
       - name: Set up JDK 17
@@ -37,12 +23,22 @@ jobs:
         with:
           java-version: '17'
           distribution: 'temurin'
-          cache: gradle
 
-      # 3. Grant execute permission for gradlew
+      # 3. Cache Gradle dependencies
+      - name: Cache Gradle build
+        uses: actions/cache@v3
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: gradle-${{ runner.os }}-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+          restore-keys: gradle-${{ runner.os }}-
+
+      # 4. Grant execute permission for gradlew
       - name: Grant Gradlew executable permissions
         run: chmod +x gradlew
 
+      # 5. Derive version from tag
       - name: Derive version from tag
         id: version
         run: |
@@ -50,29 +46,31 @@ jobs:
           VERSION="${RAW_TAG#v}"
           echo "version=$VERSION" >> "$GITHUB_OUTPUT"
 
-      # 4. Import GPG key for artifact signing
-      - name: Set up GPG
+      # 6. Import and fix the GPG key
+      - name: Import GPG key
+        id: import_gpg
         uses: crazy-max/ghaction-import-gpg@v6
         with:
           gpg_private_key: ${{ secrets.GPG_SECRET_KEY }}
           passphrase: ${{ secrets.GPG_SECRET_KEY_PASSPHRASE }}
 
-      # 5. Publish, Close, and Release to Maven Central
+        # 7. Write signing config to gradle.properties
+      - name: Write signing config
+        run: |
+          KEY_ID=$(gpg --list-secret-keys --keyid-format=long | awk '/sec/ {print $2}' | sed 's|^.*/||' | head -n1)
+          {
+          echo "signing.gnupg.executable=gpg"
+          echo "signing.gnupg.keyName=$KEY_ID"
+          echo "signing.gnupg.passphrase=${{ secrets.GPG_SECRET_KEY_PASSPHRASE }}"
+          } >> gradle.properties
+
+      # 8. Publish, Close, and Release to Maven Central
       - name: Publish Release to Maven Central
         env:
-          # Use names that clearly map to the Sonatype OSSRH service
-          OSSRH_USERNAME: ${{ secrets.OSSRH_USERNAME }} #Your Sonatype OSSRH username
-          OSSRH_TOKEN: ${{ secrets.OSSRH_TOKEN }} #Your Sonatype OSSRH password or token
-          GPG_SECRET_KEY: ${{ secrets.GPG_SECRET_KEY }}
-          SIGNING_KEY_ID: ${{ secrets.GPG_SIGNING_KEY_ID }} #The last 8 characters of your GPG key ID
-          SIGNING_PASSWORD: ${{ secrets.GPG_SECRET_KEY_PASSPHRASE }} #Your GPG key passphrase
-
-      #If you keep useInMemoryPgpKeys in build.gradle.kts, you can omit the three -Psigning.* properties
-      # and just export GPG_SECRET_KEY / GPG_SECRET_KEY_PASSPHRASE.
+          ORG_GRADLE_PROJECT_mavenCentralUsername: ${{ secrets.OSSRH_USERNAME }}
+          ORG_GRADLE_PROJECT_mavenCentralPassword: ${{ secrets.OSSRH_TOKEN }}
         run: |
-          ./gradlew \
+          ./gradlew clean \
             -Pversion=${{ steps.version.outputs.version }} \
-            :nicetoast:publishToSonatype closeAndReleaseSonatypeStagingRepository --no-daemon --stacktrace
-          
-          
-          
+            nicetoast:publishToMavenCentral \
+            --no-daemon --stacktrace

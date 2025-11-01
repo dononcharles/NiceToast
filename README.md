@@ -3,7 +3,7 @@
 [![API](https://img.shields.io/badge/API-24%2B-brightgreen.svg?style=flat)](https://android-arsenal.com/api?level=24)
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 [![Kotlin](https://img.shields.io/badge/Kotlin-100%25-blue.svg?style=flat)](https://kotlinlang.org/)
-
+[![Maven Central](https://img.shields.io/maven-central/v/io.github.dononcharles/nicetoast)](https://central.sonatype.com/artifact/io.github.dononcharles/nicetoast)
 
 Nice Toast is a stunning and highly customizable toast library for Android written in Kotlin. Elevate your app's user experience by replacing standard toasts with eye-catching, animated, and informative notifications that look great in both light and dark themes.
 
@@ -70,23 +70,42 @@ Whether you need to show a success message, an error, a warning, or just some in
 </table>
 </div>
 
-
 ## 🚀 Installation
 
-Add the dependency to your app's `build.gradle.kts` or `build.gradle` file:
+Since the library is available on **Maven Central**, you can easily add it to your project.
 
-### Kotlin (`build.gradle.kts`)
+**1. Add the repository**
+
+First, ensure that `mavenCentral()` is included in your `settings.gradle.kts` (or `settings.gradle`) file. It is usually added by default in new Android Studio projects.
 
 ```kotlin
-// In build.gradle.kts
-implementation("com.github.yourusername:nicetoast:1.0.0")
+// In settings.gradle.kts
+dependencyResolutionManagement {
+    repositories {
+        google()
+        mavenCentral()
+    }
+}
+```
+
+**2. Add the dependency**
+
+Next, add the library to your app's `build.gradle.kts` (or `build.gradle`) file.
+
+**Note:** Remember to replace `LATEST_VERSION` with the most recent version number, which you can find in the release badge at the top of this README.
+
+### Kotlin (`build.gradle.kts`)
+```kotlin
+dependencies {
+    implementation("io.github.dononcharles:nicetoast:LATEST_VERSION")
+}
 ```
 
 ### Groovy (`build.gradle`)
-
 ```groovy
-// In build.gradle
-implementation 'com.github.yourusername:nicetoast:1.0.0'
+dependencies {
+    implementation 'io.github.dononcharles:nicetoast:LATEST_VERSION'
+}
 ```
 
 ## 📖 How to Use
