@@ -1,10 +1,8 @@
-````markdown
+
 # Contributing to This Project
 
 Thank you for your interest in contributing! 🎉  
 We welcome contributions of all kinds — bug fixes, new features, documentation improvements, and suggestions.
-
----
 
 ## 📋 How to Contribute
 
