@@ -363,7 +363,7 @@ class NiceToast {
             content.animate().alpha(0f).setDuration(POST_DELAYED_DURATION).withEndAction {
                 root.removeView(content)
 
-                 if (content == currentToastView) {
+                if (content == currentToastView) {
                     currentToastView = null
                 }
             }.start()
@@ -429,7 +429,12 @@ class NiceToast {
         return StyleSpec(iconRes, primaryColor, backgroundColor, toastType.getName())
     }
 
-    private data class StyleSpec(val iconRes: Int, val primaryColor: Int, val backgroundColor: Int, val defaultTitle: String)
+    private data class StyleSpec(
+        @param:DrawableRes val iconRes: Int,
+        @param:ColorRes val primaryColor: Int,
+        @param:ColorRes val backgroundColor: Int,
+        val defaultTitle: String
+    )
 
     private fun Context.dpToPx(dp: Int): Int {
         return (dp * resources.displayMetrics.density).toInt()

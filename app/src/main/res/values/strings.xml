@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">Nice Toast</string>
     <string name="custom_colors">Custom Colors</string>
+    <string name="use_compose">Use Compose</string>
     <string name="full_background">Full Background</string>
     <string name="dark_mode">Dark Mode</string>
     <string name="success">Success</string>

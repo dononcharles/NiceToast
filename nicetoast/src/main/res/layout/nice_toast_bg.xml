@@ -45,7 +45,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/dimen_4dp"
         android:ellipsize="end"
-        android:maxLines="2"
+        android:maxLines="3"
         android:text="@string/mock_description"
         android:textAppearance="@style/TextAppearance.MaterialComponents.Body2"
         android:textColor="@android:color/black"
