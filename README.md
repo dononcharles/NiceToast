@@ -10,7 +10,7 @@
 Nice Toast is a stunning and highly customizable toast library for Android, available for both traditional **Views** and **Jetpack Compose**. Elevate your app's user experience by replacing standard toasts with eye-catching, animated, and informative notifications that look great in both light and dark themes.
 
 *   **NiceToast**: The original library for Android's Legacy View system.
-*   **cNiceToast**: A modern, Compose-native version for Jetpack Compose UIs.
+*   **CNiceToast**: A modern, Compose-native version for Jetpack Compose UIs.
 
 Whether you need to show a success message, an error, a warning, or just some info, NiceToast provides a variety of styles to fit your app's design language.
 
@@ -177,7 +177,7 @@ Displaying a toast is as simple as calling one of the built-in methods from your
 
 ### For Jetpack Compose (`cnicetoast`)
 
-In Compose, you can use the `cNiceToast` composable. You can control its visibility with a state variable.
+In Compose, you can use the `CNiceToast` composable. You can control its visibility with a state variable.
 
 ```kotlin
 
