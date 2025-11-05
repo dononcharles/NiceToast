@@ -57,7 +57,7 @@ dependencies {
 }
 
 extra["POM_ARTIFACT_ID"] = "nicetoast"
-extra["POM_VERSION"] = "1.0.1"
+extra["POM_VERSION"] = "1.0.2"
 
 /*mavenPublishing {
     // ✅ Define your coordinates (groupId, artifactId, version)

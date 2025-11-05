@@ -23,7 +23,13 @@ subprojects {
 
                 pom {
                     name.set(artifactId)
-                    description.set("$artifactId is a stunning and highly customizable (LEGACY VIEW-BASED & COMPOSE) toast library for Android written in Kotlin.")
+                    description.set(
+                        if (artifactId.startsWith("c", ignoreCase = true)) {
+                            "$artifactId is a stunning and highly customizable COMPOSE toast library for Android written in Kotlin."
+                        } else {
+                            "$artifactId is a stunning and highly customizable LEGACY VIEW-BASED toast library for Android written in Kotlin."
+                        }
+                    )
                     inceptionYear.set("2024")
                     url.set("https://github.com/dononcharles/NiceToast")
 
