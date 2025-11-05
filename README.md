@@ -14,6 +14,8 @@ Nice Toast is a stunning and highly customizable toast library for Android, avai
 
 Whether you need to show a success message, an error, a warning, or just some info, NiceToast provides a variety of styles to fit your app's design language.
 
+Don't forget to give the project **a star or a Coffee**! Thanks!
+
 ## 🤩 Features
 
 *   **Beautiful Pre-defined Styles**: Toasts for Success, Error, Warning, Info, Delete, and No Internet connection are ready to use out-of-the-box.
@@ -305,7 +307,6 @@ Your support helps cover the costs of development and allows me to invest more t
 
 </div>
 
-
 ## 🤝 Contributing
 
 Contributions are what make the open-source community such an amazing place to learn, inspire, and create. Any contributions you make are **greatly appreciated**.
@@ -317,8 +318,6 @@ If you have a suggestion that would make this better, please fork the repo and c
 3.  **Commit your Changes** (`git commit -m 'Add some AmazingFeature'`)
 4.  **Push to the Branch** (`git push origin feature/AmazingFeature`)
 5.  **Open a Pull Request**
-
-Don't forget to give the project a star! Thanks again!
 
 ## 📜 License
 
