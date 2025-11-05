@@ -3,8 +3,8 @@
 [![API](https://img.shields.io/badge/API-24%2B-brightgreen.svg?style=flat)](https://android-arsenal.com/api?level=24)
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 [![Kotlin](https://img.shields.io/badge/Kotlin-100%25-blue.svg?style=flat)](https://kotlinlang.org/)
-[![NiceToast: Maven Central](https://img.shields.io/maven-central/v/io.github.dononcharles/nicetoast)](https://central.sonatype.com/artifact/io.github.dononcharles/nicetoast)
-[![CNiceToast: Maven Central](https://img.shields.io/maven-central/v/io.github.dononcharles/cnicetoast)](https://central.sonatype.com/artifact/io.github.dononcharles/cnicetoast)
+[![Maven Central](https://img.shields.io/maven-central/v/io.github.dononcharles/nicetoast)](https://central.sonatype.com/artifact/io.github.dononcharles/nicetoast)
+[![Maven Central](https://img.shields.io/maven-central/v/io.github.dononcharles/cnicetoast)](https://central.sonatype.com/artifact/io.github.dononcharles/cnicetoast)
 
 
 Nice Toast is a stunning and highly customizable toast library for Android, available for both traditional **Views** and **Jetpack Compose**. Elevate your app's user experience by replacing standard toasts with eye-catching, animated, and informative notifications that look great in both light and dark themes.
@@ -304,3 +304,22 @@ Your support helps cover the costs of development and allows me to invest more t
 👉 [Donate via PayPal](https://www.paypal.com/paypalme/komidonon)
 
 </div>
+
+
+## 🤝 Contributing
+
+Contributions are what make the open-source community such an amazing place to learn, inspire, and create. Any contributions you make are **greatly appreciated**.
+
+If you have a suggestion that would make this better, please fork the repo and create a pull request. You can also simply open an issue with the tag "enhancement".
+
+1.  **Fork the Project**
+2.  **Create your Feature Branch** (`git checkout -b feature/AmazingFeature`)
+3.  **Commit your Changes** (`git commit -m 'Add some AmazingFeature'`)
+4.  **Push to the Branch** (`git push origin feature/AmazingFeature`)
+5.  **Open a Pull Request**
+
+Don't forget to give the project a star! Thanks again!
+
+## 📜 License
+
+Distributed under the Apache 2.0 License. See `LICENSE` for more information.
