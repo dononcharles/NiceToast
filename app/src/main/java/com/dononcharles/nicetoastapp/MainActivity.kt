@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
@@ -31,9 +32,11 @@ import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -48,14 +51,21 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.net.toUri
+import com.dononcharles.cnicetoast.CNiceToastConfiguration
+import com.dononcharles.cnicetoast.CNiceToastHost
+import com.dononcharles.cnicetoast.CNiceToastState
+import com.dononcharles.cnicetoast.CNiceToastType
+import com.dononcharles.cnicetoast.LocalCNiceToastConfig
 import com.dononcharles.nicetoast.LONG_DURATION
 import com.dononcharles.nicetoast.NiceToast
 import com.dononcharles.nicetoast.NiceToastType
 import com.dononcharles.nicetoast.SHORT_DURATION
 import com.dononcharles.nicetoast.TOAST_GRAVITY_BOTTOM
+import kotlinx.coroutines.launch
 
 class MainActivity : ComponentActivity() {
 
+    // ------- SETUP FOR LEGACY VIEW-BASED NiceToast (NON-COMPOSE) -------
     private val niceToast by lazy { NiceToast() }
 
     @OptIn(ExperimentalMaterial3Api::class)
@@ -64,10 +74,26 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             var useCustomToasts by remember { mutableStateOf(false) }
+            var useCompose by remember { mutableStateOf(false) }
             var isDarkMode by remember { mutableStateOf(false) }
             var fullBackground by remember { mutableStateOf(false) }
             var showDialog by remember { mutableStateOf(false) }
             val context = LocalContext.current
+
+            // --- SETUP FOR NEW (COMPOSE) LIBRARY ---
+            val cNiceToastState = remember { CNiceToastState() }
+            val scope = rememberCoroutineScope()
+            val customCNiceToastConfig = remember {
+                CNiceToastConfiguration().copy(
+                    successToastColor = R.color.success_color,
+                    errorToastColor = R.color.error_color,
+                    warningToastColor = R.color.warning_color,
+                    infoToastColor = R.color.info_color,
+                    // You can add background colors here too if needed
+                )
+            }
+            val defaultCNiceToastConfig = remember { CNiceToastConfiguration() }
+            val currentComposeConfig = if (useCustomToasts) customCNiceToastConfig else defaultCNiceToastConfig
 
             if (showDialog) {
                 AlertDialog(
@@ -82,149 +108,217 @@ class MainActivity : ComponentActivity() {
                                 showDialog = false
                             }
                         ) {
-                            Text("Yes".uppercase())
-                        }
-                    },
-                    dismissButton = {
-                        TextButton(onClick = { showDialog = false }) {
-                            Text("No")
+                            Text("Get Coffee".uppercase())
                         }
                     }
                 )
             }
 
-            NiceToastTheme(darkTheme = isDarkMode) {
-                Scaffold(
-                    modifier = Modifier.fillMaxSize(),
-                    topBar = {
-                        TopAppBar(
-                            title = { Text(stringResource(R.string.app_name)) },
-                            navigationIcon = {
-                                Icon(
-                                    imageVector = Icons.Default.Preview,
-                                    tint = colorResource(R.color.white),
-                                    contentDescription = stringResource(R.string.app_name)
-                                )
-                            },
-                            actions = {
-                                IconButton(onClick = { showDialog = true }) {
+            CompositionLocalProvider(LocalCNiceToastConfig provides currentComposeConfig) {
+                NiceToastTheme(darkTheme = isDarkMode) {
+                    Scaffold(
+                        modifier = Modifier.fillMaxSize(),
+                        topBar = {
+                            TopAppBar(
+                                title = { Text(stringResource(R.string.app_name)) },
+                                navigationIcon = {
                                     Icon(
-                                        painter = painterResource(id = R.drawable.baseline_coffee_24),
-                                        tint = colorResource(R.color.warning_color),
-                                        contentDescription = stringResource(R.string.buy_me_a_coffee)
+                                        imageVector = Icons.Default.Preview,
+                                        tint = colorResource(R.color.white),
+                                        contentDescription = stringResource(R.string.app_name)
+                                    )
+                                },
+                                actions = {
+                                    IconButton(onClick = { showDialog = true }) {
+                                        Icon(
+                                            painter = painterResource(id = R.drawable.baseline_coffee_24),
+                                            tint = colorResource(R.color.warning_color),
+                                            contentDescription = stringResource(R.string.buy_me_a_coffee)
+                                        )
+                                    }
+                                },
+                                colors = TopAppBarDefaults.topAppBarColors(
+                                    containerColor = MaterialTheme.colorScheme.primary,
+                                    titleContentColor = MaterialTheme.colorScheme.onPrimary,
+                                    navigationIconContentColor = MaterialTheme.colorScheme.onPrimary
+                                )
+                            )
+                        }
+                    ) { innerPadding ->
+                        val poppinsBold = FontFamily(Font(R.font.poppins_bold))
+
+                        MainScreen(
+                            modifier = Modifier.padding(innerPadding),
+                            fontFamily = poppinsBold,
+                            useCustom = useCustomToasts,
+                            onSwitchChange = { isChecked ->
+                                useCustomToasts = isChecked
+                                setCustomizedNiceToastColors(useCustomToasts)
+                            },
+                            isDarkMode = isDarkMode,
+                            onDarkModeChecked = { isChecked ->
+                                isDarkMode = isChecked
+                            },
+                            fullBackground = fullBackground,
+                            onFullBackgroundChecked = { isChecked ->
+                                fullBackground = isChecked
+                            },
+                            onSuccessClick = {
+                                if (useCompose) {
+                                    scope.launch {
+                                        cNiceToastState.show(
+                                            title = getString(R.string.edit_profile),
+                                            message = getString(R.string.your_profile_was_updated_successfully),
+                                            type = CNiceToastType.SUCCESS,
+                                            isDarkMode = isDarkMode,
+                                            isFullBackground = fullBackground
+                                        )
+                                    }
+                                } else {
+                                    niceToast.magicCreate(
+                                        activity = this,
+                                        title = getString(R.string.edit_profile),
+                                        message = getString(R.string.your_profile_was_updated_successfully),
+                                        toastType = NiceToastType.SUCCESS,
+                                        position = TOAST_GRAVITY_BOTTOM,
+                                        duration = LONG_DURATION,
+                                        font = ResourcesCompat.getFont(this, R.font.poppins_bold),
+                                        isDarkMode = isDarkMode,
+                                        isFullBackground = fullBackground
                                     )
                                 }
                             },
-                            colors = TopAppBarDefaults.topAppBarColors(
-                                containerColor = MaterialTheme.colorScheme.primary,
-                                titleContentColor = MaterialTheme.colorScheme.onPrimary,
-                                navigationIconContentColor = MaterialTheme.colorScheme.onPrimary
-                            )
+                            onErrorClick = {
+                                if (useCompose) {
+                                    scope.launch {
+                                        cNiceToastState.show(
+                                            title = getString(R.string.upload_failed),
+                                            message = getString(R.string.there_was_an_error_uploading_your_file_please_try_again),
+                                            type = CNiceToastType.ERROR,
+                                            isDarkMode = isDarkMode,
+                                            isFullBackground = fullBackground
+                                        )
+                                    }
+                                } else niceToast.magicCreate(
+                                    activity = this,
+                                    title = getString(R.string.upload_failed),
+                                    message = getString(R.string.there_was_an_error_uploading_your_file_please_try_again),
+                                    toastType = NiceToastType.ERROR,
+                                    position = TOAST_GRAVITY_BOTTOM,
+                                    duration = SHORT_DURATION,
+                                    font = ResourcesCompat.getFont(this, R.font.poppins_bold),
+                                    isDarkMode = isDarkMode,
+                                    isFullBackground = fullBackground
+                                )
+                            },
+                            onWarningClick = {
+                                if (useCompose) {
+                                    scope.launch {
+                                        cNiceToastState.show(
+                                            title = getString(R.string.low_battery),
+                                            message = getString(R.string.your_battery_is_running_low_please_connect_to_a_charger),
+                                            type = CNiceToastType.WARNING,
+                                            isDarkMode = isDarkMode,
+                                            isFullBackground = fullBackground
+                                        )
+                                    }
+                                } else niceToast.magicCreate(
+                                    activity = this,
+                                    title = getString(R.string.low_battery),
+                                    message = getString(R.string.your_battery_is_running_low_please_connect_to_a_charger),
+                                    toastType = NiceToastType.WARNING,
+                                    position = TOAST_GRAVITY_BOTTOM,
+                                    duration = LONG_DURATION,
+                                    font = ResourcesCompat.getFont(this, R.font.poppins_bold),
+                                    isDarkMode = isDarkMode,
+                                    isFullBackground = fullBackground
+                                )
+                            },
+                            onInfoClick = {
+                                if (useCompose) {
+                                    scope.launch {
+                                        cNiceToastState.show(
+                                            title = getString(R.string.new_update_available),
+                                            message = getString(R.string.a_new_version_of_the_app_is_available_please_update_to_the_latest_version),
+                                            type = CNiceToastType.INFO,
+                                            isDarkMode = isDarkMode,
+                                            isFullBackground = fullBackground
+                                        )
+                                    }
+                                } else
+                                    niceToast.magicCreate(
+                                        activity = this,
+                                        title = getString(R.string.new_update_available),
+                                        message = getString(R.string.a_new_version_of_the_app_is_available_please_update_to_the_latest_version),
+                                        toastType = NiceToastType.INFO,
+                                        position = TOAST_GRAVITY_BOTTOM,
+                                        duration = LONG_DURATION,
+                                        font = ResourcesCompat.getFont(this, R.font.poppins_bold),
+                                        isDarkMode = isDarkMode,
+                                        isFullBackground = fullBackground
+                                    )
+                            },
+                            onDeleteClick = {
+                                if (useCompose) {
+                                    scope.launch {
+                                        cNiceToastState.show(
+                                            title = getString(R.string.delete_account),
+                                            message = getString(R.string.your_account_has_been_deleted_successfully),
+                                            type = CNiceToastType.INFO,
+                                            isDarkMode = isDarkMode,
+                                            isFullBackground = fullBackground
+                                        )
+                                    }
+                                } else
+                                    niceToast.magicCreate(
+                                        activity = this,
+                                        title = getString(R.string.delete_account),
+                                        message = getString(R.string.your_account_has_been_deleted_successfully),
+                                        toastType = NiceToastType.DELETE,
+                                        position = TOAST_GRAVITY_BOTTOM,
+                                        duration = LONG_DURATION,
+                                        font = ResourcesCompat.getFont(this, R.font.poppins_bold),
+                                        isDarkMode = isDarkMode,
+                                        isFullBackground = fullBackground
+                                    )
+                            },
+                            onNoInternetClick = {
+                                if (useCompose) {
+                                    scope.launch {
+                                        cNiceToastState.show(
+                                            title = getString(R.string.no_internet_connection),
+                                            message = getString(R.string.please_check_your_internet_connection_and_try_again),
+                                            type = CNiceToastType.WARNING,
+                                            isDarkMode = isDarkMode,
+                                            isFullBackground = fullBackground
+                                        )
+                                    }
+                                } else
+                                    niceToast.magicCreate(
+                                        activity = this,
+                                        title = getString(R.string.no_internet_connection),
+                                        message = getString(R.string.please_check_your_internet_connection_and_try_again),
+                                        toastType = NiceToastType.NO_INTERNET,
+                                        position = TOAST_GRAVITY_BOTTOM,
+                                        duration = LONG_DURATION,
+                                        font = ResourcesCompat.getFont(this, R.font.poppins_bold),
+                                        isDarkMode = isDarkMode,
+                                        isFullBackground = fullBackground
+                                    )
+                            },
+                            useCompose = useCompose,
+                            onComposeSwitchChange = { isChecked -> useCompose = isChecked },
                         )
-                    }
-                ) { innerPadding ->
-                    val poppinsBold = FontFamily(Font(R.font.poppins_bold))
 
-                    MainScreen(
-                        modifier = Modifier.padding(innerPadding),
-                        fontFamily = poppinsBold,
-                        useCustom = useCustomToasts,
-                        onSwitchChange = { isChecked ->
-                            useCustomToasts = isChecked
-                            setCustomizedNiceToastColors(useCustomToasts)
-                        },
-                        isDarkMode = isDarkMode,
-                        onDarkModeChecked = { isChecked ->
-                            isDarkMode = isChecked
-                        },
-                        fullBackground = fullBackground,
-                        onFullBackgroundChecked = { isChecked ->
-                            fullBackground = isChecked
-                        },
-                        onSuccessClick = {
-                            niceToast.magicCreate(
-                                activity = this,
-                                title = getString(R.string.edit_profile),
-                                message = getString(R.string.your_profile_was_updated_successfully),
-                                toastType = NiceToastType.SUCCESS,
-                                position = TOAST_GRAVITY_BOTTOM,
-                                duration = LONG_DURATION,
-                                font = ResourcesCompat.getFont(this, R.font.poppins_bold),
-                                isDarkMode = isDarkMode,
-                                isFullBackground = fullBackground
-                            )
-                        },
-                        onErrorClick = {
-                            niceToast.magicCreate(
-                                activity = this,
-                                title = getString(R.string.upload_failed),
-                                message = getString(R.string.there_was_an_error_uploading_your_file_please_try_again),
-                                toastType = NiceToastType.ERROR,
-                                position = TOAST_GRAVITY_BOTTOM,
-                                duration = SHORT_DURATION,
-                                font = ResourcesCompat.getFont(this, R.font.poppins_bold),
-                                isDarkMode = isDarkMode,
-                                isFullBackground = fullBackground
-                            )
-                        },
-                        onWarningClick = {
-                            niceToast.magicCreate(
-                                activity = this,
-                                title = getString(R.string.low_battery),
-                                message = getString(R.string.your_battery_is_running_low_please_connect_to_a_charger),
-                                toastType = NiceToastType.WARNING,
-                                position = TOAST_GRAVITY_BOTTOM,
-                                duration = LONG_DURATION,
-                                font = ResourcesCompat.getFont(this, R.font.poppins_bold),
-                                isDarkMode = isDarkMode,
-                                isFullBackground = fullBackground
-                            )
-                        },
-                        onInfoClick = {
-                            niceToast.magicCreate(
-                                activity = this,
-                                title = getString(R.string.new_update_available),
-                                message = getString(R.string.a_new_version_of_the_app_is_available_please_update_to_the_latest_version),
-                                toastType = NiceToastType.INFO,
-                                position = TOAST_GRAVITY_BOTTOM,
-                                duration = LONG_DURATION,
-                                font = ResourcesCompat.getFont(this, R.font.poppins_bold),
-                                isDarkMode = isDarkMode,
-                                isFullBackground = fullBackground
-                            )
-                        },
-                        onDeleteClick = {
-                            niceToast.magicCreate(
-                                activity = this,
-                                title = getString(R.string.delete_account),
-                                message = getString(R.string.your_account_has_been_deleted_successfully),
-                                toastType = NiceToastType.DELETE,
-                                position = TOAST_GRAVITY_BOTTOM,
-                                duration = LONG_DURATION,
-                                font = ResourcesCompat.getFont(this, R.font.poppins_bold),
-                                isDarkMode = isDarkMode,
-                                isFullBackground = fullBackground
-                            )
-                        },
-                        onNoInternetClick = {
-                            niceToast.magicCreate(
-                                activity = this,
-                                title = getString(R.string.no_internet_connection),
-                                message = getString(R.string.please_check_your_internet_connection_and_try_again),
-                                toastType = NiceToastType.NO_INTERNET,
-                                position = TOAST_GRAVITY_BOTTOM,
-                                duration = LONG_DURATION,
-                                font = ResourcesCompat.getFont(this, R.font.poppins_bold),
-                                isDarkMode = isDarkMode,
-                                isFullBackground = fullBackground
-                            )
-                        }
-                    )
+                        // The Compose Host is ready to show toasts
+                        CNiceToastHost(hostState = cNiceToastState, modifier = Modifier.systemBarsPadding())
+                    }
                 }
             }
         }
     }
 
+    // --- THIS FUNCTION IS FOR LEGACY VIEW-BASED ---
     private fun setCustomizedNiceToastColors(useMyColor: Boolean) {
         if (useMyColor) {
             niceToast.configure {
@@ -264,7 +358,9 @@ fun MainScreen(
     onWarningClick: () -> Unit,
     onInfoClick: () -> Unit,
     onDeleteClick: () -> Unit,
-    onNoInternetClick: () -> Unit
+    onNoInternetClick: () -> Unit,
+    useCompose: Boolean,
+    onComposeSwitchChange: (Boolean) -> Unit
 ) {
     Box(
         modifier = modifier
@@ -279,6 +375,18 @@ fun MainScreen(
                 .padding(start = 72.dp, end = 72.dp, bottom = 32.dp)
                 .verticalScroll(scrollState)
         ) {
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Switch(
+                    checked = useCompose,
+                    onCheckedChange = onComposeSwitchChange
+                )
+                Text(text = stringResource(R.string.use_compose), modifier = Modifier.padding(start = 8.dp), color = MaterialTheme.colorScheme.onBackground)
+            }
+
             Row(
                 modifier = Modifier
                     .fillMaxWidth(),
@@ -383,7 +491,9 @@ fun MainScreenPreview() {
             onWarningClick = { },
             onInfoClick = { },
             onDeleteClick = { },
-            onNoInternetClick = {}
+            onNoInternetClick = {},
+            useCompose = false,
+            onComposeSwitchChange = {}
         )
     }
 }
