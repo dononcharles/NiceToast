@@ -3,8 +3,8 @@
 [![API](https://img.shields.io/badge/API-24%2B-brightgreen.svg?style=flat)](https://android-arsenal.com/api?level=24)
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 [![Kotlin](https://img.shields.io/badge/Kotlin-100%25-blue.svg?style=flat)](https://kotlinlang.org/)
-[![Maven Central](https://img.shields.io/maven-central/v/io.github.dononcharles/nicetoast)](https://central.sonatype.com/artifact/io.github.dononcharles/nicetoast)
-[![Maven Central](https://img.shields.io/maven-central/v/io.github.dononcharles/cnicetoast)](https://central.sonatype.com/artifact/io.github.dononcharles/cnicetoast)
+[![NiceToast: Maven Central](https://img.shields.io/maven-central/v/io.github.dononcharles/nicetoast)](https://central.sonatype.com/artifact/io.github.dononcharles/nicetoast)
+[![CNiceToast: Maven Central](https://img.shields.io/maven-central/v/io.github.dononcharles/cnicetoast)](https://central.sonatype.com/artifact/io.github.dononcharles/cnicetoast)
 
 
 Nice Toast is a stunning and highly customizable toast library for Android, available for both traditional **Views** and **Jetpack Compose**. Elevate your app's user experience by replacing standard toasts with eye-catching, animated, and informative notifications that look great in both light and dark themes.
