@@ -14,7 +14,6 @@ subprojects {
             apply(plugin = "signing")
             // Maven publishing configuration
             configure<MavenPublishBaseExtension> {
-                // Use per-module overrides if provided
                 val groupId = rootProject.property("GROUP") as String
                 val artifactId = (project.findProperty("POM_ARTIFACT_ID") ?: project.name) as String
                 val version = project.findProperty("POM_VERSION") as String
