@@ -57,5 +57,5 @@ dependencies {
     debugImplementation(libs.androidx.ui.tooling)
 }
 
-extra["POM_ARTIFACT_ID"] = "cpnicetoast"
-extra["POM_VERSION"] = "1.0.1"
+extra["POM_ARTIFACT_ID"] = "cnicetoast"
+extra["POM_VERSION"] = "1.0.2"
