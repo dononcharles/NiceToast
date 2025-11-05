@@ -4,7 +4,7 @@ on:
   push:
     branches: [ features/composenicetoast ]
  # release:
- #   types: [ created ] # This workflow runs when a new GitHub release is created
+ #  types: [ created ] # This workflow runs when a new GitHub release is created
 
 jobs:
   publish:
