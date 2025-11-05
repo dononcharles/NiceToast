@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#4CAF50</color>
+    <color name="colorPrimaryVariant">#388E3C</color>
+    <color name="colorOnPrimary">#FFFFFF</color>
+
+    <color name="warning_color">#FFC107</color>
+    <color name="error_color">#F44336</color>
+    <color name="success_color">#4CAF50</color>
+    <color name="info_color">#2196F3</color>
+    <color name="delete_color">#F44336</color>
+
+    <color name="error_bg_color">#33F44336</color>
+    <color name="success_bg_color">#334CAF50</color>
+    <color name="info_bg_color">#332196F3</color>
+    <color name="delete_bg_color">#33F44336</color>
+    <color name="warning_bg_color">#33FFC107</color>
+    <color name="no_internet">#FF9800</color>
+
+    <color name="white">#FFFFFF</color>
+    <color name="black">#000000</color>
+
+    <color name="dark_color">#343434</color>
+</resources>
