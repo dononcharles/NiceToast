@@ -4,8 +4,13 @@
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 [![Kotlin](https://img.shields.io/badge/Kotlin-100%25-blue.svg?style=flat)](https://kotlinlang.org/)
 [![Maven Central](https://img.shields.io/maven-central/v/io.github.dononcharles/nicetoast)](https://central.sonatype.com/artifact/io.github.dononcharles/nicetoast)
+[![Maven Central](https://img.shields.io/maven-central/v/io.github.dononcharles/cnicetoast)](https://central.sonatype.com/artifact/io.github.dononcharles/cnicetoast)
 
-Nice Toast is a stunning and highly customizable toast library for Android written in Kotlin. Elevate your app's user experience by replacing standard toasts with eye-catching, animated, and informative notifications that look great in both light and dark themes.
+
+Nice Toast is a stunning and highly customizable toast library for Android, available for both traditional **Views** and **Jetpack Compose**. Elevate your app's user experience by replacing standard toasts with eye-catching, animated, and informative notifications that look great in both light and dark themes.
+
+*   **NiceToast**: The original library for Android's Legacy View system.
+*   **cNiceToast**: A modern, Compose-native version for Jetpack Compose UIs.
 
 Whether you need to show a success message, an error, a warning, or just some info, NiceToast provides a variety of styles to fit your app's design language.
 
@@ -20,9 +25,8 @@ Whether you need to show a success message, an error, a warning, or just some in
     *   Easily override default colors for each toast type.
     *   Apply custom fonts to match your app's branding.
     *   Set custom animations for the toast icon.
-*   **Flexible & Easy to Use**: A simple, fluent API makes it effortless to display toasts from any Activity.
+*   **Flexible & Easy to Use**: Simple, fluent APIs for both Views and Compose.
 *   **Position Control**: Show toasts at the top, center, or bottom of the screen.
-*   **Built with ViewBinding**: Modern, safe, and efficient view handling.
 
 ## ✨ Preview
 
@@ -72,7 +76,7 @@ Whether you need to show a success message, an error, a warning, or just some in
 
 ## 🚀 Installation
 
-Since the library is available on **Maven Central**, you can easily add it to your project.
+Since both libraries are available on **Maven Central**, you can easily add them to your project.
 
 **1. Add the repository**
 
@@ -90,33 +94,67 @@ dependencyResolutionManagement {
 
 **2. Add the dependency**
 
-Next, add the library to your app's `build.gradle.kts` (or `build.gradle`) file.
+Next, add the appropriate library to your app's `build.gradle.kts` (or `build.gradle`) file.
 
-**Note:** Remember to replace `LATEST_VERSION` with the most recent version number, which you can find in the release badge at the top of this README.
+**Note:** Remember to replace `LATEST_VERSION` with the most recent version number, which you can find in the release badges at the top of this README.
 
-### Kotlin (`build.gradle.kts`)
+### For Legacy Views (`nicetoast`)
+
+**Kotlin (`build.gradle.kts`)**
 ```kotlin
 dependencies {
     implementation("io.github.dononcharles:nicetoast:LATEST_VERSION")
 }
 ```
 
-### Groovy (`build.gradle`)
+**Groovy (`build.gradle`)**
 ```groovy
 dependencies {
     implementation 'io.github.dononcharles:nicetoast:LATEST_VERSION'
 }
 ```
 
+### For Jetpack Compose (`cnicetoast`)
+
+**Kotlin (`build.gradle.kts`)**
+```kotlin
+dependencies {
+    implementation("io.github.dononcharles:cnicetoast:LATEST_COMPOSE_VERSION")
+}
+```
+
+**Groovy (`build.gradle`)**
+```groovy
+dependencies {
+    implementation 'io.github.dononcharles:cnicetoast:LATEST_COMPOSE_VERSION'
+}
+```
+
 ## 📖 How to Use
 
-### Basic Toasts
+### For Legacy Views (`nicetoast`)
 
 Displaying a toast is as simple as calling one of the built-in methods from your Activity.
 
 ```kotlin
+
+ private val niceToast by lazy { NiceToast() }
+ 
+ // All in one place by using magic method
+ niceToast.magicCreate(
+     activity = this,
+     title = getString(R.string.edit_profile),
+     message = getString(R.string.your_profile_was_updated_successfully),
+     toastType = NiceToastType.SUCCESS,
+     position = TOAST_GRAVITY_BOTTOM,
+     duration = LONG_DURATION,
+     font = ResourcesCompat.getFont(this, R.font.poppins_bold),
+     isDarkMode = isDarkMode,
+     isFullBackground = fullBackground
+ )
+
 // Success Toast (Side-bar style)
-NiceToast().createNiceToast(
+ niceToast.createNiceToast(
     activity = this,
     message = "Your profile was updated successfully!",
     toastType = NiceToastType.SUCCESS,
@@ -126,7 +164,7 @@ NiceToast().createNiceToast(
 )
 
 // Error Toast (Solid background style)
-NiceToast().createNiceToastWithBackground(
+ niceToast.createNiceToastWithBackground(
     activity = this,
     title = "Oh No!",
     message = "Failed to upload the file.",
@@ -135,39 +173,58 @@ NiceToast().createNiceToastWithBackground(
     duration = 4000L,
     font = null
 )
-
-// Dark Mode Warning Toast
-NiceToast().createDarkNiceToast(
-    activity = this,
-    message = "Please check your network connection.",
-    toastType = NiceToastType.WARNING,
-    position = Gravity.CENTER,
-    duration = 3000L,
-    font = null
-)
 ```
 
-### All-in-One Function
+### For Jetpack Compose (`cnicetoast`)
 
-For more advanced control, you can use the `magicCreate` function, which allows you to configure every aspect of the toast in a single call. This is useful when you need to dynamically set properties like dark mode or the background style.
+In Compose, you can use the `cNiceToast` composable. You can control its visibility with a state variable.
 
 ```kotlin
-niceToast.magicCreate(
-    activity = this,
-    title = getString(R.string.low_battery),
-    message = getString(R.string.your_battery_is_running_low_please_connect_to_a_charger),
-    toastType = NiceToastType.WARNING,
-    position = TOAST_GRAVITY_BOTTOM,
-    duration = LONG_DURATION,
-    font = ResourcesCompat.getFont(this, R.font.poppins_bold),
-    isDarkMode = isDarkMode,
-    isFullBackground = fullBackground
-)
+
+// ... inside your Composable function
+
+setContent {
+    // --- SETUP FOR NEW (COMPOSE) LIBRARY ---
+    val cNiceToastState = remember { CNiceToastState() }
+    val scope = rememberCoroutineScope()
+    val customCNiceToastConfig = remember {
+        CNiceToastConfiguration().copy(
+            successToastColor = R.color.success_color,
+            errorToastColor = R.color.error_color,
+            warningToastColor = R.color.warning_color,
+            infoToastColor = R.color.info_color,
+            // You can add background colors here too if needed
+        )
+    }
+    val defaultCNiceToastConfig = remember { CNiceToastConfiguration() }
+    val currentComposeConfig = if (useCustomToasts) customCNiceToastConfig else defaultCNiceToastConfig
+
+    CompositionLocalProvider(LocalCNiceToastConfig provides currentComposeConfig) {
+        NiceToastTheme(darkTheme = isDarkMode) {
+            MyScreen(
+                onBtnClick = {
+                    scope.launch {
+                        cNiceToastState.show(
+                            title = getString(R.string.low_battery),
+                            message = getString(R.string.your_battery_is_running_low_please_connect_to_a_charger),
+                            type = CNiceToastType.WARNING,
+                            isDarkMode = isDarkMode,
+                            isFullBackground = fullBackground
+                        )
+                    }
+                }
+            )
+
+            // The Compose Host is ready to show toasts
+            CNiceToastHost(hostState = cNiceToastState, modifier = Modifier.systemBarsPadding())
+        }
+    }
+}
 ```
 
 ### Toast Types
 
-The library includes several predefined types:
+Both libraries use the same toast types:
 
 *   `NiceToastType.SUCCESS`
 *   `NiceToastType.ERROR`
@@ -180,8 +237,10 @@ The library includes several predefined types:
 
 You can customize the look and feel of all toasts globally. This is perfect for matching the library to your app's brand colors. It's recommended to do this once in your `Application` class.
 
+This applies to `nicetoast` (View-based).
+
 ```kotlin
-private fun setCustomizedNiceToastColors(useMyColor: Boolean) {
+ private fun setCustomizedNiceToastColors(useMyColor: Boolean) {
     if (useMyColor) {
         niceToast.configure {
             setSuccessColor(R.color.success_color)
@@ -200,8 +259,32 @@ private fun setCustomizedNiceToastColors(useMyColor: Boolean) {
             setInfoBackgroundColor(R.color.info_bg_color)
         }
     } else {
-       // To reset all configurations to their default values
         niceToast.resetAll()
+    }
+}
+```
+
+This applies to `cnicetoast` (Compose-based).
+
+```kotlin
+setContent {
+    val customCNiceToastConfig = remember {
+        CNiceToastConfiguration().copy(
+            successToastColor = R.color.success_color,
+            errorToastColor = R.color.error_color,
+            warningToastColor = R.color.warning_color,
+            infoToastColor = R.color.info_color,
+            // You can add background colors here too if needed
+        )
+    }
+
+    val defaultCNiceToastConfig = remember { CNiceToastConfiguration() }
+    val currentComposeConfig = if (useCustomToasts) customCNiceToastConfig else defaultCNiceToastConfig
+
+    CompositionLocalProvider(LocalCNiceToastConfig provides currentComposeConfig) {
+        MyComposeScreen(darkTheme = isDarkMode) {
+
+        }
     }
 }
 ```

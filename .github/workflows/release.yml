@@ -73,4 +73,5 @@ jobs:
           ./gradlew clean \
             -Pversion=${{ steps.version.outputs.version }} \
             nicetoast:publishToMavenCentral \
+            cnicetoast:publishToMavenCentral \
             --no-daemon --stacktrace

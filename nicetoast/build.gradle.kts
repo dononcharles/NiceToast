@@ -3,12 +3,13 @@ import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.android)
-    id("com.vanniktech.maven.publish")
-    id("signing")
+   // id("com.vanniktech.maven.publish")
+    alias(libs.plugins.vanniktech.maven.publish)
+   // id("signing")
 }
 
-group = "io.github.dononcharles"
-version = "1.0.1"
+//group = "io.github.dononcharles"
+//version = "1.0.1"
 
 android {
     namespace = "com.dononcharles.nicetoast"
@@ -37,6 +38,7 @@ android {
         }
         jvmToolchain(17)
     }
+
     buildFeatures {
         viewBinding = true
     }
@@ -54,7 +56,10 @@ dependencies {
     androidTestImplementation(libs.androidx.espresso.core)
 }
 
-mavenPublishing {
+extra["POM_ARTIFACT_ID"] = "nicetoast"
+extra["POM_VERSION"] = "1.0.1"
+
+/*mavenPublishing {
     // ✅ Define your coordinates (groupId, artifactId, version)
     coordinates(artifactId = "nicetoast")
 
@@ -89,9 +94,10 @@ mavenPublishing {
 
     // ✅ This automatically configures publishing to the new Central Portal API
     publishToMavenCentral()
-}
+}*/
+/*
 
 signing {
     useGpgCmd()
     sign(publishing.publications)
-}
+}*/
